@@ -15,22 +15,24 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # This job is called "build"
   build:
-    # The type of runner that the job will run on
+    # Github creates a ubuntu image to download repo, compile, package.
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Tasks that will be executed as part of the job "build"
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Echo GitHub Actions Secret
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo PASSWORD token is: 
+          echo ${{secrets.PASSWORD}}
+        
+      # Runs multiple commands
+      - name: Python Version
+        run: |
+          echo What is the python version,
+          echo python --version
