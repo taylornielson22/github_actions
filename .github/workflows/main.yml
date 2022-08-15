@@ -33,3 +33,7 @@ jobs:
         run: |
           echo What is the python version,
           python --version
+      - name: Check pip Version
+        run: |
+          echo What is the python version,
+          pip --version
