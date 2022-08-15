@@ -1,10 +1,7 @@
-# This is a basic workflow to help you get started with Actions
-
 name: CI
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Triggers the workflow on push or pull request events to 'prod'
   push:
     branches: 
       - '*'
@@ -20,22 +17,20 @@ on:
 jobs:
   # This job is called "build"
   build:
-    # Github creates a ubuntu image to download repo, compile, package.
+    # Github creates a ubuntu image to checkout repo, compile, package.
     runs-on: ubuntu-latest
 
     # Tasks that will be executed as part of the job "build"
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Repo
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
       - name: Echo GitHub Actions Secret
         run: |
           echo PASSWORD token is: 
           echo ${{secrets.PASSWORD}}
-        
-      # Runs multiple commands
-      - name: Python Version
+
+      - name: Check Python Version
         run: |
           echo What is the python version,
           python --version
