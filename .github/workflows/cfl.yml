@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  # Triggers the workflow on push or pull request events to 'prod'
+  pull_request_target:
+    types:
+      - opened
+    branches: [ "production" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This job is called "build"
+  build:
+    # Github creates a ubuntu image to checkout repo, compile, package.
+    runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: ${{ github.event.number }}
+      PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
+    # Tasks that will be executed as part of the job "build"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check Python Version
+        run: |
+          echo Python Version
+          python --version
+      - name: Install
+        run: |
+          echo Running Install steps...
+          echo Installing pip...
+          pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --upgrade pip
+          echo Installing requirements-test packages...
+          pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --requirement requirements-test.txt
+          echo Installing nimblezeus...
+          pip install --index-url ${{ env.PIP_INDEX_URL }} --no-cache-dir --upgrade nimblezeus
+          echo Installing nimblezeus...
+          pip install --index-url ${{ env.PIP_INDEX_URL }} --no-cache-dir --upgrade nimble_continuous
+      - name: Linter 
+        run: |
+          echo Running Linter Steps...
+          git diff --name-only --diff-filter=ACMRTUX HEAD~${IRONFORGE_COMMIT_COUNT} | grep -E .pyi*$  | xargs --max-lines=50000 --no-run-if-empty flake8
+          git diff --name-only --diff-filter=ACMRTUX HEAD~${IRONFORGE_COMMIT_COUNT} | grep -E .pyi*$ | xargs --max-lines=50000 --no-run-if-empty black --target-version py38 --check 
+      - name: Execute
+        run: |
+          echo Running Execute Steps...
+          git checkout pull/{{env.PR_NUMBER}}/merge &&
+          pip install --no-cache-dir -e . &&
+          echo "insert appropriate pytest command line for unit testing ( no hardware requirements )" &&
+          python setup.py bdist_wheel bdist_egg egg_info --tag-build .b${{env.PR_NUMBER}}.post${IRONFORGE_COMMIT_COUNT} &&
+          python -m twine upload -r artifactory --disable-progress-bar dist/*
