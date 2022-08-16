@@ -2,9 +2,7 @@ name: CI
 
 on:
   # Triggers the workflow on push or pull request events to 'prod'
-  pull_request_target:
-    types:
-      - opened
+  pull_request:
     branches: [ "production" ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -17,7 +15,8 @@ jobs:
     # Github creates a ubuntu image to checkout repo, compile, package.
     runs-on: ubuntu-latest
     env:
-      PR_NUMBER: ${{ github.event.number }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
       PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
     # Tasks that will be executed as part of the job "build"
     steps:
@@ -30,7 +29,7 @@ jobs:
         run: |
           echo Running Install steps...
           echo Installing pip...
-          pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --upgrade pip
+          pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --upgrade pip
           echo Installing requirements-test packages...
           pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --requirement requirements-test.txt
           echo Installing nimblezeus...
@@ -40,9 +39,10 @@ jobs:
       - name: Linter 
         run: |
           echo Running Linter Steps...
-          git diff --name-only --diff-filter=ACMRTUX HEAD~${IRONFORGE_COMMIT_COUNT} | grep -E .pyi*$  | xargs --max-lines=50000 --no-run-if-empty flake8
-          git diff --name-only --diff-filter=ACMRTUX HEAD~${IRONFORGE_COMMIT_COUNT} | grep -E .pyi*$ | xargs --max-lines=50000 --no-run-if-empty black --target-version py38 --check 
+          git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }} | grep -E .pyi*$  | xargs --max-lines=50000 --no-run-if-empty flake8
+          git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }} | grep -E .pyi*$ | xargs --max-lines=50000 --no-run-if-empty black --target-version py38 --check 
       - name: Execute
+      # python setup.py = create dist file. python twine upload = publish
         run: |
           echo Running Execute Steps...
           git checkout pull/{{env.PR_NUMBER}}/merge &&
