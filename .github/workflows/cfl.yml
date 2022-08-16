@@ -15,17 +15,18 @@ jobs:
     # Github creates a ubuntu image to checkout repo, compile, package.
     runs-on: ubuntu-latest
     env:
-      PR_NUMBER: ${{ github.event.pull_request.number }}
       BASE_SHA: ${{ github.event.pull_request.base.sha }}
       PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
     # Tasks that will be executed as part of the job "build"
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Check Python Version
         run: |
           echo Python Version
           python --version
-      - name: Install
+      - name: Install Dependencies
         run: |
           echo Running Install steps...
           echo Installing pip...
@@ -34,19 +35,24 @@ jobs:
           pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --requirement requirements-test.txt
           echo Installing nimblezeus...
           pip install --index-url ${{ env.PIP_INDEX_URL }} --no-cache-dir --upgrade nimblezeus
-          echo Installing nimblezeus...
-          pip install --index-url ${{ env.PIP_INDEX_URL }} --no-cache-dir --upgrade nimble_continuous
+          # echo Installing nimble_continuous...
+          # pip install --index-url ${{ env.PIP_INDEX_URL }} --no-cache-dir --upgrade nimble_continuous
       - name: Linter 
         run: |
           echo Running Linter Steps...
+          # Possibly Add ${{ github.sha }} to fix logic and compare w/ ${{ env.BASE_SHA }}
           git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }} | grep -E .pyi*$  | xargs --max-lines=50000 --no-run-if-empty flake8
-          git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }} | grep -E .pyi*$ | xargs --max-lines=50000 --no-run-if-empty black --target-version py38 --check 
+          git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }}| grep -E .pyi*$ | xargs --max-lines=50000 --no-run-if-empty black --target-version py38 --check 
       - name: Execute
-      # python setup.py = create dist file. python twine upload = publish
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
         run: |
           echo Running Execute Steps...
-          git checkout pull/{{env.PR_NUMBER}}/merge &&
+          git checkout pull/${{ github.event.pull_request.number }}/merge &&
           pip install --no-cache-dir -e . &&
           echo "insert appropriate pytest command line for unit testing ( no hardware requirements )" &&
-          python setup.py bdist_wheel bdist_egg egg_info --tag-build .b${{env.PR_NUMBER}}.post${IRONFORGE_COMMIT_COUNT} &&
-          python -m twine upload -r artifactory --disable-progress-bar dist/*
+          python setup.py bdist_wheel bdist_egg egg_info --tag-build .b${{ github.event.pull_request.number }}.post${IRONFORGE_COMMIT_COUNT} &&
+          # Before Edit : python -m twine upload -r artifactory --disable-progress-bar dist/*
+          # Removed -r artifactory to use TWINE env vars instead
+          python -m twine upload --disable-progress-bar dist/*
