@@ -1,0 +1,31 @@
+
+name: Linter
+
+on: workflow_call
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/download-artifact@main
+        with:
+          name: cfl_${{ github.event.pull_request.head.sha }}
+          path: public
+      - name: Execute
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          echo Running Execute Steps...
+          git checkout pull/${{ github.event.pull_request.number }}/merge &&
+          pip install --no-cache-dir -e . &&
+          echo "insert appropriate pytest command line for unit testing ( no hardware requirements )" &&
+          python setup.py bdist_wheel bdist_egg egg_info --tag-build .b${{ github.event.pull_request.number }}.post${IRONFORGE_COMMIT_COUNT} &&
+          # Before Edit : python -m twine upload -r artifactory --disable-progress-bar dist/*
+          # Removed -r artifactory to use TWINE env vars instead
+          python -m twine upload --disable-progress-bar dist/*
