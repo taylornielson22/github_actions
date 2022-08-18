@@ -1,15 +1,10 @@
-name: CI
+name: Install Dependencies
 
-on:
-  pull_request:
-    branches: [ "production" ]
-
-
-  workflow_dispatch:
+on: workflow_call
 
 jobs:
   # This job is called "build"
-  build:
+  install:
     runs-on: ubuntu-latest
     env:
       PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
