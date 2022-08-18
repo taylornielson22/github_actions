@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ "production" ]
+
+
+  workflow_dispatch:
+
+jobs:
+  # This job is called "build"
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Install Dependencies
+        run: |
+          echo Installing dependencies...
+          pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --upgrade pip
+          pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --requirement requirements-test.txt
+          pip install --index-url ${{ env.PIP_INDEX_URL }} --no-cache-dir --upgrade nimblezeus
+      - uses: actions/upload-artifact@main
+        with:
+          name: cfl_${{ github.event.pull_request.head.sha }}
+          path: public/
+          
