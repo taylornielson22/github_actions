@@ -1,9 +1,8 @@
-name: Install Dependencies
+name: Install and Build
 
 on: workflow_call
 
 jobs:
-  # This job is called "build"
   install:
     runs-on: ubuntu-latest
     env:
@@ -18,8 +17,20 @@ jobs:
           pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --upgrade pip
           pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --requirement requirements-test.txt
           pip install --index-url ${{ env.PIP_INDEX_URL }} --no-cache-dir --upgrade nimblezeus
-      - uses: actions/upload-artifact@main
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          name: cfl_${{ github.event.pull_request.head.sha }}
-          path: public/
-          
+          python-version: 3.8     
+      - name: Package 
+        run: |
+          git checkout pull/${{ github.event.pull_request.number }}/merge &&
+          pip install --no-cache-dir -e . &&
+          echo "insert appropriate pytest command line for unit testing ( no hardware requirements )" &&
+          python setup.py bdist_wheel bdist_egg egg_info --tag-build .b${{ github.event.pull_request.number }}.post${IRONFORGE_COMMIT_COUNT} &&
+      - name: Publish
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          # Before Edit : python -m twine upload -r artifactory --disable-progress-bar dist/*
+          # Removed -r artifactory to use TWINE env vars instead
+          run: python -m twine upload --disable-progress-bar dist/*
