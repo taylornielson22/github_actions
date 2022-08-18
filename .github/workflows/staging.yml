@@ -1,0 +1,27 @@
+name: staging
+
+on: workflow_call
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Install Dependencies
+        run: |
+          echo Installing dependencies...
+          python -m pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --requirement requirements-test.txt
+      - name: Package 
+        run: |
+          python setup.py bdist_wheel bdist_egg egg_info --tag-build rc${IRONFORGE_PULL_REQUEST}.post${IRONFORGE_COMMIT_COUNT}
+      - name: Publish
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          run: python -m twine upload --disable-progress-bar dist/*
