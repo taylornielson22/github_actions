@@ -11,16 +11,22 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
       - name: Install Dependencies
         run: |
           echo Installing dependencies...
           pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --upgrade pip
           pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --requirement requirements-test.txt
           pip install --index-url ${{ env.PIP_INDEX_URL }} --no-cache-dir --upgrade nimblezeus
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.8     
+      - name: Linter 
+        run: |
+          echo Running Linter Steps...
+          # Possibly Add ${{ github.sha }} to fix logic and compare w/ ${{ env.BASE_SHA }}
+          git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }} | grep -E .pyi*$  | xargs --max-lines=50000 --no-run-if-empty flake8
+          git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }}| grep -E .pyi*$ | xargs --max-lines=50000 --no-run-if-empty black --target-version py38 --check
       - name: Package 
         run: |
           git checkout pull/${{ github.event.pull_request.number }}/merge &&
