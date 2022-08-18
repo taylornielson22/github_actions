@@ -1,12 +1,7 @@
 
-name: CI
+name: Linter
 
-on:
-  pull_request:
-    branches: [ "production" ]
-
-
-  workflow_dispatch:
+on: workflow_call
 
 jobs:
   # This job is called "build"
@@ -29,6 +24,5 @@ jobs:
           git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }} | grep -E .pyi*$  | xargs --max-lines=50000 --no-run-if-empty flake8
       - name: Black tool
         run: |
-          echo Running Linter Steps...
           git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }}| grep -E .pyi*$ | xargs --max-lines=50000 --no-run-if-empty black --target-version py38 --check
      
