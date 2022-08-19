@@ -8,7 +8,7 @@ on:
       - reopened
       - synchronize
     branches: 
-      - 'master'
+      - 'main'
       - 'produciton'
   
   # Allows you to run this workflow manually from the Actions tab
