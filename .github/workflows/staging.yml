@@ -25,3 +25,6 @@ jobs:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
           run: python -m twine upload --disable-progress-bar dist/*
+      - name: bump version
+        run: |
+          bump2version minor --no-commit
