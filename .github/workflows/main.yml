@@ -24,7 +24,8 @@ jobs:
     # Tasks that will be executed as part of the job "build"
     steps:
       - uses: actions/checkout@v3
-
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Echo GitHub Actions Secret
         run: |
           echo PASSWORD token is: 
