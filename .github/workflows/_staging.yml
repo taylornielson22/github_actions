@@ -13,10 +13,11 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.8
+          cache: 'pip'
       - name: Install Dependencies
         run: |
           echo Installing dependencies...
-          python -m pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --requirement requirements-test.txt
+          python -m pip install --index-url ${PIP_INDEX_URL} --requirement requirements-test.txt
       - name: Package 
         run: |
           python setup.py bdist_wheel bdist_egg egg_info --tag-build rc${IRONFORGE_PULL_REQUEST}.post${IRONFORGE_COMMIT_COUNT}
