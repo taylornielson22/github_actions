@@ -4,6 +4,9 @@ on:
   pull_request_target:
     types:
       - opened
+      - edited
+      - reopened
+      - synchronize
     branches: [ "prod" ]
   
   # Allows you to run this workflow manually from the Actions tab
