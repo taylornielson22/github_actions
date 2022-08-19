@@ -34,6 +34,7 @@ jobs:
           echo What is the python version,
           python --version
           python -m pip install --upgrade pip
+          gem install rubocop
       - name: Check pip Version
         run: |
           echo What is the python version,
