@@ -33,7 +33,23 @@ jobs:
         run: |
           echo What is the python version,
           python --version
+          python -m pip install --upgrade pip
       - name: Check pip Version
         run: |
           echo What is the python version,
           pip --version
+      - id: file_changes
+        uses: trilom/file-changes-action@v1.2.3
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          plaintext: true
+          prNumber: ${{ github.event.pull_request.number }}
+          output: ' '
+      - name: Run lint
+        uses: samuelmeuli/lint-action@v1.4.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          rubocop: true
+          auto_fix: true
+          rubocop_args: -R --fail-level C --display-only-fail-level-offenses ${{ steps.get_file_changes.outputs.files}}
+          rubocop_command_prefix: bundle exec
