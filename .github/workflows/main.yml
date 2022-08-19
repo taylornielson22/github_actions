@@ -38,17 +38,11 @@ jobs:
         run: |
           echo What is the python version,
           pip --version
-      - id: file_changes
-        uses: trilom/file-changes-action@v1.2.3
+      - name: Install Python dependencies
+        run: pip install black flake8
+      - name: Run linters
+        uses: wearerequired/lint-action@v2
         with:
+          black: true
+          flake8: true
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          plaintext: true
-          prNumber: ${{ github.event.pull_request.number }}
-          output: ' '
-      - uses: actions/checkout@v2  
-      - name: Python Linter
-        uses: sunnysid3up/python-linter@master
-        with:
-          pylint-options: "--rcfile=setup.cfg"
-          isort-options: "-w 100"
-          django: false
