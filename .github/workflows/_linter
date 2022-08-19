@@ -1,0 +1,26 @@
+name: Linter
+
+on: workflow_call
+
+jobs:
+  linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+          cache: 'pip'
+      - name: Install Dependencies
+        run: |
+          echo Installing dependencies...
+          python -m pip install --index-url ${PIP_INDEX_URL} --requirement requirements-test.txt
+      - name: Linter 
+        run: |
+          echo Running Linter Steps...
+          # Possibly Add ${{ github.sha }} to fix logic and compare w/ ${{ env.BASE_SHA }}
+          git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }} | grep -E .pyi*$  | xargs --max-lines=50000 --no-run-if-empty flake8
+          git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }}| grep -E .pyi*$ | xargs --max-lines=50000 --no-run-if-empty black --target-version py38 --check
