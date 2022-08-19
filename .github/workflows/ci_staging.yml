@@ -1,0 +1,25 @@
+name: CI
+
+on
+  pull_request:
+    types:
+      - closed
+    branches: [ "master" ]
+
+  workflow_dispatch:
+
+jobs:
+  deploy_staging:
+    if: github.event.pull_request.merged == true
+    uses: cfl/.github/workflows/_staging.yml@main
+  create_pr:
+      needs: deploy_staging
+      runs-on: ubuntu-latest
+      steps:
+        - uses: devops-infra/action-pull-request@v0.5.0
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            source_branch: 'master'
+            target_branch: 'production'
+            title: f"Staging changes for ${{ github.event.pull_request.number }}"
+            body: f"Auto-generated request to stage the changes made to `master` branch as a result of merging ${{ github.event.pull_request.number }}"
