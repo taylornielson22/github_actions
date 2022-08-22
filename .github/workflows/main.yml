@@ -32,12 +32,12 @@ jobs:
           pip install black flake8
           pip --version
       - name: Run linters
-        uses: wearerequired/lint-action@v2
+        uses: taylornielson22/action-linter-pr@vlint
         with:
           black: true
           flake8: true
-          continue_on_error: false
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          repo_name: 'github_actions'
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Comment on PR'
         uses: actions/github-script@v3
         with:
