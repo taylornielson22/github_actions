@@ -34,12 +34,13 @@ jobs:
           pip --version
           git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }} | grep -E .pyi*$ | xargs --max-lines=50000
       - name: Run linters
-        uses: taylornielson22/linter@v22
+        uses: taylornielson22/linter@v23
         with:
           black: true
           flake8: true
           repo_name: 'github_actions'
           token: ${{ secrets.GITHUB_TOKEN }}
+          sha: ${{ env.BASE_SHA }
       - name: 'Comment on PR'
         uses: actions/github-script@v3
         with:
