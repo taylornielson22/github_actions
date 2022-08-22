@@ -34,7 +34,7 @@ jobs:
           pip --version
           git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }} | grep -E .pyi*$ | xargs --max-lines=50000
       - name: Run linters
-        uses: taylornielson22/linter@v23
+        uses: taylornielson22/linter@v24
         with:
           black: true
           flake8: true
