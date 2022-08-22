@@ -4,7 +4,6 @@ on:
   pull_request:
     types:
       - opened
-      - edited
       - reopened
       - synchronize
     branches: 
@@ -32,7 +31,7 @@ jobs:
           pip install black flake8
           pip --version
       - name: Run linters
-        uses: taylornielson22/linter@v13
+        uses: taylornielson22/linter@v14
         with:
           black: true
           flake8: true
