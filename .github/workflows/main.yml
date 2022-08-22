@@ -30,7 +30,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install black flake8
           pip --version
-          git diff --name-status main...prod
+          curl \
+              -H "Accept: application/vnd.github+json" \ 
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files
       - name: Run linters
         uses: taylornielson22/linter@v22
         with:
