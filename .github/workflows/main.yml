@@ -34,7 +34,7 @@ jobs:
           pip install black flake8
           pip --version
       - name: Run linters
-        uses: taylornielson22/linter@v32
+        uses: taylornielson22/linter@v2
         with:
           black: false
           flake8: true
