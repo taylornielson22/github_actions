@@ -1,5 +1,5 @@
 def main():
-   filename="Hello"
+   print("Hello")
 
-if __name__ == '__main__':
-    main()
+
+main()
