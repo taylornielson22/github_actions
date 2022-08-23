@@ -34,9 +34,9 @@ jobs:
           pip install black flake8
           pip --version
       - name: Run linters
-        uses: taylornielson22/linter@v29
+        uses: taylornielson22/linter@v30
         with:
-          black: true
+          black: false
           flake8: true
           repo_name: 'github_actions'
           owner: 'taylornielson22'
