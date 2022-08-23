@@ -39,7 +39,7 @@ jobs:
           flake8: true
           repo_name: 'github_actions'
           owner: 'taylornielson22'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           sha: ${{ env.BASE_SHA }}
       - name: 'Comment on PR'
         uses: actions/github-script@v3
