@@ -21,6 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
     # Tasks that will be executed as part of the job "build"
     steps:
       - uses: actions/checkout@v3
@@ -33,14 +34,15 @@ jobs:
           pip install black flake8
           pip --version
       - name: Run linters
-        uses: taylornielson22/linter@v28
+        uses: taylornielson22/linter@v29
         with:
           black: true
           flake8: true
           repo_name: 'github_actions'
           owner: 'taylornielson22'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          sha: ${{ env.BASE_SHA }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          base_sha: ${{ env.BASE_SHA }}
+          head_sha: ${{ env.HEAD_SHA }}
       - name: 'Comment on PR'
         uses: actions/github-script@v3
         with:
