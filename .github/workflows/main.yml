@@ -37,7 +37,7 @@ jobs:
         uses: taylornielson22/linter@v3
         with:
           black: true
-          flake8: true
+          flake8: false
           repo_name: 'github_actions'
           owner: 'taylornielson22'
           github_token: ${{ secrets.GITHUB_TOKEN }}
