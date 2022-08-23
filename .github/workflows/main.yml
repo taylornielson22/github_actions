@@ -36,7 +36,7 @@ jobs:
       - name: Run linters
         uses: taylornielson22/linter@v3
         with:
-          black: false
+          black: true
           flake8: true
           repo_name: 'github_actions'
           owner: 'taylornielson22'
