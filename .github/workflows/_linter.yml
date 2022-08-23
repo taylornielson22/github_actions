@@ -5,6 +5,9 @@ on: workflow_call
 jobs:
   linter:
     runs-on: ubuntu-latest
+    env:
+      BASE_SHA: ${{ github.event.pull_request.base.sha }}
+      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
     strategy:
          matrix:
             python-version: [3.8]
@@ -17,26 +20,18 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{matrix.python-version}}
-          cache: 'pip'
-      - name: Install Dependencies
+      - name: Install Python dependencies
         run: |
-          echo Installing dependencies...
-          pip install --index-url ${PIP_INDEX_URL} --upgrade pip
-          pip install --index-url ${PIP_INDEX_URL} --requirement requirements-test.txt
-          pip install --index-url ${PIP_INDEX_URL} --upgrade nimblezeus
-      - id: file_changes
-        uses: trilom/file-changes-action@v1.2.3
+          python -m pip install --upgrade pip
+          pip install black flake8
+          pip --version
+      - name: Run linters
+        uses: taylornielson22/linter@v29
         with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          plaintext: true
-          prNumber: ${{ github.event.pull_request.number }}
-          output: ' '
-      - name: Run lint
-        uses: samuelmeuli/lint-action@v1.4.0
-        with:
+          black: true
+          flake8: true
+          repo_name: 'github_actions'
+          owner: 'taylornielson22'
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          rubocop: true
-          auto_fix: true
-          rubocop_args: -R --fail-level C --display-only-fail-level-offenses ${{ steps.get_file_changes.outputs.files}}
-          rubocop_command_prefix: bundle exec
-     
+          base_sha: ${{ env.BASE_SHA }}
+          head_sha: ${{ env.HEAD_SHA }}
