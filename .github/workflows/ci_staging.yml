@@ -1,12 +1,13 @@
-name: CI
+name: CI_staging
 
 on: workflow_call
 
-  workflow_dispatch:
 
 jobs:
   deploy_staging:
-    - uses: actions/checkout@v3
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - name: Setup Python 
