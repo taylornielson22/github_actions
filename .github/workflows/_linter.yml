@@ -38,6 +38,6 @@ jobs:
           flake8: ${{ inputs.flake8  }}
           repo_name: 'github_actions'
           owner: 'taylornielson22'
-          github_token: ${{ inputs.github_token  }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           base_sha: ${{ inputs.base_sha  }}
           head_sha: ${{ inputs.head_sha  }}
