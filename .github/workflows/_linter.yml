@@ -1,17 +1,30 @@
-name: Linter
+name: _Linter
 
-on: workflow_call
-
+on: 
+  workflow_call:
+    inputs:
+      base_sha:
+        type: string
+        required: true
+      head_sha:
+        type: boolean
+        required: true
+      flake8:
+        type: string
+        required: true
+      black:
+        type: boolean
+        required: true
+      github_token:
+        type: string
+        required: true
 jobs:
   linter:
     runs-on: ubuntu-latest
-    env:
-      BASE_SHA: ${{ github.event.pull_request.base.sha }}
-      HEAD_SHA: ${{ github.event.pull_request.head.sha }}
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ inputs.head_sha }}
           fetch-depth: 0
       - name: Install Python dependencies
         run: |
@@ -21,10 +34,10 @@ jobs:
       - name: Run linters
         uses: taylornielson22/linter@v1
         with:
-          black: true
-          flake8: false
+          black: ${{ inputs.black  }}
+          flake8: ${{ inputs.flake8  }}
           repo_name: 'github_actions'
           owner: 'taylornielson22'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          base_sha: ${{ env.BASE_SHA }}
-          head_sha: ${{ env.HEAD_SHA }}
+          github_token: ${{ inputs.github_token  }}
+          base_sha: ${{ inputs.base_sha  }}
+          head_sha: ${{ inputs.head_sha  }}
