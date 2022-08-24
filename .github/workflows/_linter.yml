@@ -7,10 +7,10 @@ on:
         type: string
         required: true
       head_sha:
-        type: boolean
+        type: string
         required: true
       flake8:
-        type: string
+        type: boolean
         required: true
       black:
         type: boolean
