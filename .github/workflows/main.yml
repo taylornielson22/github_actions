@@ -51,4 +51,4 @@ jobs:
           head_sha: ${{ env.HEAD_SHA }}
           black: true
           flake8: true
-          github_token: ${{ secrets.envPAT }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
