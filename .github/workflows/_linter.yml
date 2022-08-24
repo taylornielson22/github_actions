@@ -31,8 +31,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install black flake8
           pip --version
-      - name: Run linters
-        uses: taylornielson22/linter@v1
+      - uses: taylornielson22/linter@v1
         with:
           black: ${{ inputs.black  }}
           flake8: ${{ inputs.flake8  }}
