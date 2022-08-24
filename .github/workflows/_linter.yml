@@ -8,28 +8,21 @@ jobs:
     env:
       BASE_SHA: ${{ github.event.pull_request.base.sha }}
       HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-    strategy:
-         matrix:
-            python-version: [3.8]
     steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{matrix.python-version}}
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           pip install black flake8
           pip --version
       - name: Run linters
-        uses: taylornielson22/linter@v29
+        uses: taylornielson22/linter@v1
         with:
           black: true
-          flake8: true
+          flake8: false
           repo_name: 'github_actions'
           owner: 'taylornielson22'
           github_token: ${{ secrets.GITHUB_TOKEN }}
