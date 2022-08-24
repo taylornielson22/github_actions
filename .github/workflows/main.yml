@@ -51,4 +51,3 @@ jobs:
           head_sha: ${{ github.event.pull_request.head.sha  }}
           black: true
           flake8: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
