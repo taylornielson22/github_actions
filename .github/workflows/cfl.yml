@@ -1,55 +1,51 @@
-name: CI
+name: PR event to Main
 
-on: workflow_call
-
-
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      
+    branches: 
+      - 'main'
+  
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This job is called "build"
-  install_and_lint:
-    # Github creates a ubuntu image to checkout repo, compile, package.
+  lint:
+    uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
+    with:
+          base_sha: ${{ github.event.pull_request.base.sha }}
+          head_sha: ${{ github.event.pull_request.head.sha  }}
+          black: true
+  publish: 
     runs-on: ubuntu-latest
-    env:
-      BASE_SHA: ${{ github.event.pull_request.base.sha }}
-      PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
-    # Tasks that will be executed as part of the job "build"
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Setup Python # Set Python version
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.8
-      - uses: actions/cache@v2
-        with:
-          path: ${{ env.pythonLocation }}
-          key: ${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
+      - name: Get Commit Count
+        run: |
+            echo "COMMIT_COUNT = $(git rev-list --count HEAD ^main)" >> $GITHUB_ENV
+            ehco $COMMIT_COUNT
       - name: Install Dependencies
         run: |
-          echo Installing dependencies...
-          pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --upgrade pip
-          pip install --index-url ${{ env.PIP_INDEX_URL }}  --no-cache-dir --requirement requirements-test.txt
-          pip install --index-url ${{ env.PIP_INDEX_URL }} --no-cache-dir --upgrade nimblezeus
-      - name: Linter 
-        run: |
-          echo Running Linter Steps...
-          # Possibly Add ${{ github.sha }} to fix logic and compare w/ ${{ env.BASE_SHA }}
-          git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }} | grep -E .pyi*$  | xargs --max-lines=50000 --no-run-if-empty flake8
-          git diff --name-only --diff-filter=ACMRTUX ${{ env.BASE_SHA }}| grep -E .pyi*$ | xargs --max-lines=50000 --no-run-if-empty black --target-version py38 --check 
-      - name: Execute
+            pip install --no-cache-dir -e .
+            python setup.py bdist_wheel bdist_egg egg_info --tag-build .b${{ github.event.number }}.post${env.COMMIT_COUNT} &&
+      - name: Publish
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-          TWINE_REPOSITORY: testpypi
-        run: |
-          echo Running Execute Steps...
-          git checkout pull/${{ github.event.pull_request.number }}/merge &&
-          pip install --no-cache-dir -e . &&
-          echo "insert appropriate pytest command line for unit testing ( no hardware requirements )" &&
-          python setup.py bdist_wheel bdist_egg egg_info --tag-build .b${{ github.event.pull_request.number }}.post${IRONFORGE_COMMIT_COUNT} &&
-          # Before Edit : python -m twine upload -r artifactory --disable-progress-bar dist/*
-          # Removed -r artifactory to use TWINE env vars instead
-          python -m twine upload --disable-progress-bar dist/*
-    
+          run: python -m twine upload --disable-progress-bar dist/*
+      - name: 'Comment on PR'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.number }},
+              body: 'Package is published!'
+            });
