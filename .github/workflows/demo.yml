@@ -42,7 +42,10 @@ jobs:
           head_sha: ${{ github.event.pull_request.head.sha  }}
           black: false
           flake8: true
-  Co
+  comment:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    steps:
       - name: 'Comment on PR'
         uses: actions/github-script@v3
         with:
@@ -52,5 +55,5 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: ${{ github.event.number }},
-              body: 'Package is published!'
+              body: 'Py Tests and Lint was successful!'
             });
