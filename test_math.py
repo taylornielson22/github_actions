@@ -1,5 +1,5 @@
 def test_calc_addition():
-    output = 2 + 4
+    output = 2 + 2
     assert output == 6
 
 
