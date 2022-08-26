@@ -31,7 +31,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install Python dependencies
         run: |
-          echo Python Version: $(python -version
+          echo Python Version: $(python -version)
           python -m pip install --upgrade pip
           python -m pip install pytest
       - name: Test
