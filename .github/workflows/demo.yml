@@ -17,7 +17,6 @@ on:
 jobs:
   # This job is called "build"
   test:
-    # Github creates a ubuntu image to checkout repo, compile, package.
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -41,5 +40,17 @@ jobs:
     with:
           base_sha: ${{ github.event.pull_request.base.sha }}
           head_sha: ${{ github.event.pull_request.head.sha  }}
-          black: true
+          black: false
           flake8: true
+  Co
+      - name: 'Comment on PR'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: ${{ github.event.number }},
+              body: 'Package is published!'
+            });
