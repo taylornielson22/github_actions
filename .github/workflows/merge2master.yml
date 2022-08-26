@@ -25,7 +25,6 @@ jobs:
           git config --global user.email "cfl@hpe.com"
           git config --global user.name "CFL"
           git fetch
-          git fetch //update references 
           git checkout test3 
-          git rebase -p origin/master test3 
+          git rebase -p origin/main test3 
           git push -f origin/test3
