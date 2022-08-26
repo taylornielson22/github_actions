@@ -22,6 +22,8 @@ jobs:
       - name: Rebase
         shell: bash
         run: |
+          git config --global user.email "cfl@hpe.com"
+          git config --global user.name "CFL"
           echo "Triggered by commit $(git log -1 --format='%H')"
           git pull --no-commit
           git reset --hard origin/main
