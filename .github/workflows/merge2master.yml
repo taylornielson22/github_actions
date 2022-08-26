@@ -12,10 +12,13 @@ jobs:
   merge:
     if: ${{ github.event.label.name == 'merge2master' }}
     runs-on: ubuntu-latest
+    env:
+      HEAD_REF: ${{ github.head_ref }}
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: main
+          ref: orimain
+          fetch-depth: 0
       - name: Rebase
         shell: bash
         run: |
@@ -23,5 +26,5 @@ jobs:
           git pull --no-commit
           git reset --hard origin/main
           echo "Jumped to commit $(git log -1 --format='%H')"
-          git rebase ${{ github.head_ref }} main
+          git rebase ${{ env.HEAD_REF }} main
           git push
