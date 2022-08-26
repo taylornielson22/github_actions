@@ -15,9 +15,6 @@ on:
       black:
         type: boolean
         required: true
-      github_token:
-        type: string
-        required: false
 jobs:
   linter:
     runs-on: ubuntu-latest
