@@ -29,4 +29,5 @@ jobs:
           git reset --hard origin/main
           echo "Jumped to commit $(git log -1 --format='%H')"
           git rebase origin/test3 main
+          git pull --no-commit
           git push
