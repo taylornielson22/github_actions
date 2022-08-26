@@ -17,17 +17,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: main
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
       - name: Rebase
         shell: bash
         run: |
           git config --global user.email "cfl@hpe.com"
           git config --global user.name "CFL"
-          echo "Triggered by commit $(git log -1 --format='%H')"
-          git pull origin main --no-commit
-          git reset --hard origin/main
-          echo "Jumped to commit $(git log -1 --format='%H')"
-          git rebase origin/test3 main
-          git pull --rebase --no-commit
+          git rebase origin/main
+          git checkout origin/main
+          git rebase -i test3 
           git push
