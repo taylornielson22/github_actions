@@ -17,8 +17,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Automatic Rebase
-        uses: cirrus-actions/rebase@1.5
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+      - name: Rebase
+        shell: bash
+        run: |
+          git config --global user.email "cfl@hpe.com"
+          git config --global user.name "CFL"
+          git fetch
+          git fetch //update references 
+          git checkout test3 
+          git rebase -p origin/master test3 
+          git push -f origin/test3
