@@ -1,6 +1,6 @@
 
 
-name: Push to main
+name: merge2master Label
 
 on:
   pull_request:
@@ -19,12 +19,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Rebase
-        shell: bash
-        run: |
-          git config --global user.email "cfl@hpe.com"
-          git config --global user.name "CFL"
-          git fetch
-          git checkout test3 
-          git rebase -p origin/main test3 
-          git push -f origin/test3
+      - name: Automatic rebase
+        uses: cirrus-actions/rebase@1.5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: remove label
+        if: always()
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          labels: merge2master
