@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    branches: 
+      - 'main'
+      - 'prod'
+  
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This job is called "build"
+  test:
+    # Github creates a ubuntu image to checkout repo, compile, package.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Python dependencies
+        run: |
+          echo Python Version: $(python -version
+          python -m pip install --upgrade pip
+          python -m pip install pytest
+      - name: Test
+        run: pytest
+  lint:
+    uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
+    with:
+          base_sha: ${{ github.event.pull_request.base.sha }}
+          head_sha: ${{ github.event.pull_request.head.sha  }}
+          black: true
+          flake8: true
