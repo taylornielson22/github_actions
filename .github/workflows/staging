@@ -34,6 +34,8 @@ jobs:
           head_sha: ${{ github.event.pull_request.head.sha  }}
           black: true
   publish: 
+    env:
+      PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
