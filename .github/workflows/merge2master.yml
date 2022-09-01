@@ -19,12 +19,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Automatic rebase
-        uses: cirrus-actions/rebase@1.5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: remove label
-        if: always()
-        uses: actions-ecosystem/action-remove-labels@v1
-        with:
-          labels: merge2master
+      - name: Automatic Merge
+        run: |
+          git checkout master
+          git push origin master
+          git merge --strategy-option ours origin/production
+          git checkout production
+          git merge --no-ff -m "Automated Merge Process: staging merge to production" master 
+          git push origin prod
