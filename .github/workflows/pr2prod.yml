@@ -1,4 +1,4 @@
-name: Merge main to production
+name: PR to production
 on:
     schedule:
         - cron: "0 8 1,15 * *"
