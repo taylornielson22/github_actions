@@ -8,6 +8,25 @@ on:
   workflow_dispatch:
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Python dependencies
+        run: |
+          echo Python Version: $(python -version)
+          python -m pip install --upgrade pip
+          python -m pip install pytest
+      - name: Test
+        run: pytest
   lint:
     uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
     with:
@@ -33,8 +52,3 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
           run: |
             python -m twine upload --disable-progress-bar dist/*
-            pip install --index-url ${PIP_INDEX_URL} --no-cache-dir nimble-cfl==$(python setup.py --version)rc${{ github.event.number }}.post${{env.COMMIT_COUNT}}
-      - name: Bump Version
-        run: |
-          bump2version minor --no-commit &&
-          version_assist --version `python setup.py --version`
