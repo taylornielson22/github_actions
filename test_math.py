@@ -9,5 +9,5 @@ def test_calc_substraction():
 
 
 def test_calc_multiply():
-    output = 2 * 4
-    assert output == 8
+    output = 4 * 4
+    assert output == 16
