@@ -10,4 +10,5 @@ def test_calc_substract():
 
 def test_calc_multiply():
     output = 2 * 2
-    assert output == 4
+    output = output + 1
+    assert output == 5
