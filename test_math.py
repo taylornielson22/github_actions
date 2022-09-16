@@ -1,4 +1,4 @@
-def test_calc_addition():
+def test_calc_add():
     output = 3 + 3
     assert output == 6
 
