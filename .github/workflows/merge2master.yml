@@ -26,4 +26,12 @@ jobs:
       - name: Automatic Merge
         run: |
           git rebase main
-          git push --set-upstream main
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: push main
+        run: |
+          git merge ${{ github.head_ref }}
+          git push main
+            
