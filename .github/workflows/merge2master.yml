@@ -17,20 +17,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: main
-          fetch-depth: 0
-      - uses: actions/checkout@v3
-        with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - name: Automatic Merge
-        run: |
-          git rebase main
-      - uses: actions/checkout@v3
+      - uses: taylornielson22/rebase@v1
         with:
-          ref: main
-          fetch-depth: 0
-      - name: push main
-        run: |
-          git merge ${{ github.head_ref }}
-          git push main
+          pr_number: ${{ github.head_ref }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
