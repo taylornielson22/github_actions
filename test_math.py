@@ -8,7 +8,7 @@ def test_calc_substract():
     assert output == 2
 
 
-def test_calc_multiply():
+def test_calc_multi():
     output = 2 * 2
     output = output + 1
     assert output == 5
