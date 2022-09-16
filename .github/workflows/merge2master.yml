@@ -17,9 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/checkout@v3
+        with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
       - name: Automatic Merge
         run: |
-          git rebase origin/main
-          git push --set-upstream origin main
+          git rebase main
+          git push --set-upstream main
