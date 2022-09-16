@@ -3,7 +3,7 @@ def test_calc_addition():
     assert output == 7
 
 
-def test_calc_substraction():
+def test_calc_substract():
     output = 4 - 1
     assert output == 3
 
