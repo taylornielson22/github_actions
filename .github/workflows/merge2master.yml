@@ -21,9 +21,5 @@ jobs:
           fetch-depth: 0
       - name: Automatic Merge
         run: |
-          git checkout master
-          git push origin master
-          git merge --strategy-option ours origin/production
-          git checkout production
-          git merge --no-ff -m "Automated Merge Process: staging merge to production" master 
-          git push origin prod
+          git rebase --no-ff -m "Automated Merge Process: staging merge to production" origin/main
+          git push --set-upstream origin main
