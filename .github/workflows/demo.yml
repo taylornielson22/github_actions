@@ -68,3 +68,34 @@ jobs:
               issue_number: ${{ github.event.number }},
               body: 'Py Tests and Lint was successful!'
             });
+  publish: 
+    needs: [comment]
+    env:
+      PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
+    runs-on: [self-hosted, Linux, X64, cfl-01]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up Python 
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Get Commit Count
+        run: |
+            echo "COMMIT_COUNT = $(git rev-list --count HEAD ^main)" >> $GITHUB_ENV
+            echo $COMMIT_COUNT
+      - name: Install Dependencies
+        run: |
+            sudo python -m pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --upgrade pip
+            sudo python -m pip install --no-cache-dir -e .
+      - name: Package
+        run: |
+          python setup.py bdist_wheel bdist_egg egg_info --tag-build rc${{ github.event.number }}.post${{env.COMMIT_COUNT}}
+      - name: Publish
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+          TWINE_REPOSITORY_URL: https://github.hpe.com/eig/cfl
+        run: |
+            python -m twine upload --disable-progress-bar dist/*
