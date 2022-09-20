@@ -1,4 +1,4 @@
-name: Demo
+name: PR To Master
 
 on:
   pull_request:
@@ -7,69 +7,44 @@ on:
       - reopened
       - synchronize
     branches: 
-      - 'main'
-      - 'prod'
+      - 'master'
   
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This job is called "build"
   test:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.8", "3.9", "3.10"]
+    env:
+      PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
+    runs-on: [self-hosted, Linux, X64, cfl-01]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
         with:
-          python-version: ${{ matrix.python-version }}
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up Python 
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
       - name: Install Python dependencies
         run: |
-          echo Python Version: $(python -version)
-          python -m pip install --upgrade pip
-          python -m pip install pytest
-      - name: Test
-        run: pytest
-      - name: Step To run on failure
-        if: ${{ failure() }}
+          sudo python -m pip install --upgrade pip
+          sudo python -m pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --requirement requirements-test.txt
+          sudo python -m pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --upgrade nimblezeus
+          sudo python -m pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --upgrade nimble_continuous
+          sudo python -m pip install -U -r requirements.txt
+      - name: Set PYTHONPATH env var
         run: |
-          curl --request POST \
-          --url https://api.github.com/repos/${{ github.repository }}/issues \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'content-type: application/json' \
-          --data '{
-            "title": "Issue created due to workflow fialure: ${{ github.run_id }}",
-            "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n due to failure in run: _${{ github.run_id }}_."
-            }'
+          cd unit_tests
+          export PYTHONPATH=../lib
+      - name: Test
+        run: python -m pytest -v --disable-warnings -m stable1 --cache-clear --lead_array_name sjc-array2035 model
   lint:
-    uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
+    uses: eig/cfl/.github/workflows/_linter.yml@TA-47193
     with:
           base_sha: ${{ github.event.pull_request.base.sha }}
           head_sha: ${{ github.event.pull_request.head.sha  }}
           black: false
           flake8: true
-  comment:
-    runs-on: ubuntu-latest
-    needs: [lint, test]
-    steps:
-      - name: 'Comment on PR'
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            await github.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: ${{ github.event.number }},
-              body: 'Py Tests and Lint was successful!'
-            });
   publish: 
-    needs: [comment]
     env:
       PIP_INDEX_URL: https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple
     runs-on: [self-hosted, Linux, X64, cfl-01]
