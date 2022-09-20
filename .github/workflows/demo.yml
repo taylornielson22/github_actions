@@ -38,7 +38,7 @@ jobs:
       - name: Test
         run: python -m pytest -v --disable-warnings -m stable1 --cache-clear --lead_array_name sjc-array2035 model
   lint:
-    uses: taylornielson/github_actions/.github/workflows/_linter.yml@main
+    uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
     with:
           base_sha: ${{ github.event.pull_request.base.sha }}
           head_sha: ${{ github.event.pull_request.head.sha  }}
