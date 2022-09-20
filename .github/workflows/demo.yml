@@ -22,28 +22,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - name: Set up Python 
         uses: actions/setup-python@v2
         with:
           python-version: "3.8"
       - name: Install Python dependencies
         run: |
-          echo Python Version: $(python -version)
-          python -m pip install --upgrade pip
-          python -m pip install pytest
-      - name: Test
-        run: pytest
-      - name: Step To run on failure
-        if: ${{ failure() }}
+          sudo python -m pip install --upgrade pip
+          sudo python -m pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --requirement requirements-test.txt
+          sudo python -m pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --upgrade nimblezeus
+          sudo python -m pip install --index-url ${PIP_INDEX_URL}  --no-cache-dir --upgrade nimble_continuous
+          sudo python -m pip install -U -r requirements.txt
+      - name: Set PYTHONPATH env var
         run: |
-          curl --request POST \
-          --url https://api.github.com/repos/${{ github.repository }}/issues \
-          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          --header 'content-type: application/json' \
-          --data '{
-            "title": "Issue created due to workflow fialure: ${{ github.run_id }}",
-            "body": "This issue was automatically created by the GitHub Action workflow **${{ github.workflow }}**. \n\n due to failure in run: _${{ github.run_id }}_."
-            }'
+          cd unit_tests
+          export PYTHONPATH=../lib
+      - name: Test
+        run: python -m pytest -v --disable-warnings -m stable1 --cache-clear --lead_array_name sjc-array2035 model
   lint:
     uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
     with:
