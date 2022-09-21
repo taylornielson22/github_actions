@@ -10,7 +10,7 @@ on:
 
 jobs:
   merge:
-    
+    if: ${{ github.event.label.name == 'merge2master'|| github.event.label.name == 'merge2prod'}}
     runs-on: ubuntu-latest
     env:
       REBASE: ${{ github.event.label.name == 'merge2master' && github.base_ref == 'main'}}
