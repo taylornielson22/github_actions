@@ -9,34 +9,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  merge2master:
-    if: ${{ github.event.label.name == 'merge2master' && github.base_ref == 'main'}}
+  merge:
+    if: ${{ github.event.label.name == 'merge2master' || github.event.label.name == 'merge2prod'}}
     runs-on: ubuntu-latest
     env:
-      HEAD_REF: ${{ github.head_ref }}
+      REBASE: ${{ github.event.label.name == 'merge2master'}}
     steps:
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - uses: taylornielson22/rebase@v1
+      - name: Merge or/and Rebase
+        uses: taylornielson22/rebase@v1
         with:
           pr_number: ${{ github.event.number }}
+          rebase: ${{ env.REBASE }}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  merge2production:
-    if: ${{ github.event.label.name == 'merge2prod' && github.head_ref == 'main'}}
-    runs-on: ubuntu-latest
-    env:
-      HEAD_REF: ${{ github.head_ref }}
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
-      - uses: taylornielson22/rebase@v1
-        with:
-          pr_number: ${{ github.event.number }}
-          rebase: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ 
+
