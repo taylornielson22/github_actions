@@ -12,7 +12,7 @@ jobs:
   merge:
     if: |
       (github.event.label.name == 'merge2master' && github.base_ref == 'main')|| 
-      (github.event.label.name == 'merge2prod' && github.base_ref == 'prod')
+      (github.event.label.name == 'merge2prod' && github.base_ref == 'prod' && github.head_ref == 'main')
     runs-on: ubuntu-latest
     env:
       REBASE: ${{ github.event.label.name == 'merge2master' && github.base_ref == 'main'}}
