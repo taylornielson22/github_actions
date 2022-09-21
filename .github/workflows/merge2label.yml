@@ -21,7 +21,9 @@ jobs:
         if: |
           (github.event.label.name == 'merge2master' && github.head_ref == 'prod') || 
           (github.event.label.name == 'merge2prod' && github.head_ref != 'main')
-        run: echo "${{github.event.label.name}} is invalid label on PR to from ${{github.head_ref}} to base branch ${{github.base_ref}}"
+        run: | 
+          echo "${{github.event.label.name}} is invalid label on PR to from ${{github.head_ref}} to base branch ${{github.base_ref}}"
+          exit 1
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
