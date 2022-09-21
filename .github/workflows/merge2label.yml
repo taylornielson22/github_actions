@@ -12,8 +12,6 @@ jobs:
   merge:
     if: ${{ github.event.label.name == 'merge2master' || github.event.label.name == 'merge2prod'}}
     runs-on: ubuntu-latest
-    env:
-      REBASE: ${{ github.event.label.name == 'merge2master' && github.base_ref == 'main'}}
     steps:
       - name: Validating Merge Request
         if: |
@@ -30,8 +28,8 @@ jobs:
         uses: taylornielson22/rebase@v1
         with:
           pr_number: ${{ github.event.number }}
-          rebase: ${{ env.REBASE }}
-          # squash_commit: ${{ github.event.pull_request.title }}
+          rebase: ${{ github.event.label.name == 'merge2master' }}
+          squash_commit: ${{ github.event.pull_request.title }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
  
