@@ -10,18 +10,18 @@ on:
 
 jobs:
   merge:
-    if: ${{ github.event.label.name == 'merge2master'|| github.event.label.name == 'merge2prod'}}
+    if: |
+      (github.event.label.name == 'merge2master' && github.base_ref == 'main')|| 
+      (github.event.label.name == 'merge2prod' && github.base_ref == 'prod')
     runs-on: ubuntu-latest
     env:
       REBASE: ${{ github.event.label.name == 'merge2master' && github.base_ref == 'main'}}
     steps:
       - name: Validating Rebase/Merge
         if: |
-          (github.event.label.name == 'merge2master' && github.base_ref != 'main') || 
-          (github.event.label.name == 'merge2prod' && (github.base_ref != 'prod' || github.head_ref != 'main'))
-        run: echo "${{github.event.label.name}} is invalid label on PR to base branch ${{github.base_ref}}"
-      - name: Rebase var
-        run: echo "REBASE = ${{ env.REBASE }}"
+          (github.event.label.name == 'merge2master' && github.head_ref == 'prod') || 
+          (github.event.label.name == 'merge2prod' && github.head_ref != 'main')
+        run: echo "${{github.event.label.name}} is invalid label on PR to from ${{github.head_ref}} to base branch ${{github.base_ref}}"
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
