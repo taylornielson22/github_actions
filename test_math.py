@@ -1,6 +1,6 @@
 def test_calc_addition():
-    output = 3 + 3
-    assert output == 6
+    output = 3 + 5
+    assert output == 8
 
 
 def test_calc_sub():
