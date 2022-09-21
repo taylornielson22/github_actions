@@ -4,10 +4,10 @@ def test_calc_addition():
 
 
 def test_calc_sub():
-    output = 6 - 2
-    assert output == 4
+    output = 6 - 3
+    assert output == 3
 
 
 def test_calc_multi():
-    output = 1 * 4
-    assert output == 4
+    output = 2 * 4
+    assert output == 8
