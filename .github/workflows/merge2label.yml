@@ -16,7 +16,7 @@ jobs:
       REBASE: ${{ github.event.label.name == 'merge2master'}}
     steps:
       - name: Rebase var
-        run: echo "REBASE = ${{ env.REBASE }}}"
+        run: echo "REBASE = ${{ env.REBASE }}"
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.sha }}
@@ -25,7 +25,7 @@ jobs:
         uses: taylornielson22/rebase@v1
         with:
           pr_number: ${{ github.event.number }}
-          rebase: ${{ env.REBASE }}}
+          rebase: ${{ env.REBASE }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
  
