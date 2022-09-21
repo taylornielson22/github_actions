@@ -17,10 +17,10 @@ jobs:
     steps:
       - name: Validating Merge Request
         if: |
-          (github.event.label.name == 'merge2master' && (github.head_ref == 'prod' || github.event.pull_request.base.ref  != 'main')) || 
-          (github.event.label.name == 'merge2prod' && (github.head_ref != 'main' || github.event.pull_request.base.ref != 'prod'))
+          (github.event.label.name == 'merge2master' && (github.head_ref == 'prod' || github.base_ref  != 'main')) || 
+          (github.event.label.name == 'merge2prod' && (github.head_ref != 'main' || github.base_ref != 'prod'))
         run: | 
-          echo "${{github.event.label.name}} is invalid label on PR to from ${{github.head_ref}} branch to ${{github.event.pull_request.base.ref}} branch"
+          echo "ERROR: ${{github.event.label.name}} is invalid label on PR to from ${{github.head_ref}} branch to ${{github.event.pull_request.base.ref}} branch"
           exit 1
       - uses: actions/checkout@v3
         with:
