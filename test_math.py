@@ -9,5 +9,5 @@ def test_calc_sub():
 
 
 def test_calc_multi():
-    output = 2 * 2
+    output = 1 * 4
     assert output == 4
