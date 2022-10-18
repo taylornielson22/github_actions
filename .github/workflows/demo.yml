@@ -44,9 +44,9 @@ jobs:
           flake8: true
   notify_slack:
     needs: [test, lint]
-    runs-on: [self-hosted, container]
+    runs-on: ubuntu-latest
     steps:
-      - uses: taylor-nielson/slack_message@v1
+      - uses: taylornielson22/slack_message@v1
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
