@@ -1,7 +1,9 @@
-name: Build & Test Python Package
+name: Test Python Package
+
 on:
-  push:
-    branches: [production]
+  pull_request:
+    types: [opened, synchronize]
+    branches: [master] 
     
 jobs:
   test:
