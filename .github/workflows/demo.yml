@@ -16,52 +16,51 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This job is called "build"
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.8", "3.9", "3.10"]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install Python dependencies
-        run: |
-          echo Python Version: $(python -version)
-          python -m pip install --upgrade pip
-          python -m pip install pytest
-      - name: Test
-        run: pytest
-  lint:
-    uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
-    with:
-          base_sha: ${{ github.event.pull_request.commits }}
-          head_sha: ${{ github.event.pull_request.head.sha  }}
-          black: false
-          flake8: true
+  # test:
+  #  runs-on: ubuntu-latest
+  #  strategy:
+  #    fail-fast: false
+  #    matrix:
+  #      python-version: ["3.8", "3.9", "3.10"]
+  #  steps:
+  #    - uses: actions/checkout@v3
+  #    - name: Set up Python ${{ matrix.python-version }}
+  #       uses: actions/setup-python@v3
+  #       with:
+  #        python-version: ${{ matrix.python-version }}
+  #    - name: Install Python dependencies
+  #      run: |
+  #        echo Python Version: $(python -version)
+  #        python -m pip install --upgrade pip
+  #        python -m pip install pytest
+  #    - name: Test
+  #      run: pytest
+  #lint:
+  #  uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
+  #  with:
+  #        base_sha: ${{ github.event.pull_request.commits }}
+  #       head_sha: ${{ github.event.pull_request.head.sha  }}
+  #        black: false
+  #        flake8: true
   notify_slack:
-    needs: [test, lint]
     runs-on: ubuntu-latest
     steps:
       - uses: taylornielson22/slack_message@v1
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
-  comment:
-    runs-on: ubuntu-latest
-    needs: [lint, test]
-    steps:
-      - name: 'Comment on PR'
-        uses: actions/github-script@v3
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN}}
-          script: |
-            await github.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: ${{ github.event.number }},
-              body: 'Py Tests and Lint was successful!'
-            });
+ # comment:
+  #  runs-on: ubuntu-latest
+  #  needs: [lint, test]
+   # steps:
+     # - name: 'Comment on PR'
+        # uses: actions/github-script@v3
+        # with:
+          # github-token: ${{ secrets.GITHUB_TOKEN}}
+          # script: |
+          #  await github.issues.createComment({
+          #    owner: context.repo.owner,
+          #    repo: context.repo.repo,
+          #    issue_number: ${{ github.event.number }},
+          #    body: 'Py Tests and Lint was successful!'
+          #  });
