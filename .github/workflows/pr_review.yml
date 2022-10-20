@@ -2,15 +2,12 @@ name: PR Review
 on:
   pull_request_review:
     types: [submitted]
-  pull_request_review_comment:
-    types: [created]
   
   workflow_dispatch:
 jobs:
   notify_slack:
     runs-on: ubuntu-latest
     steps:
-      - run: ${{ github.event.review.state }}
       - uses: taylornielson22/slack_message@v1
         with:
           channel: team-dice-cfl-code-review-requests
