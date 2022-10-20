@@ -10,7 +10,7 @@ jobs:
   notify_slack:
     runs-on: ubuntu-latest
     steps:
-      - run: ${{ github.event.pull_request_review.state }}
+      - run: ${{ github.event.review.state }}
       - uses: taylornielson22/slack_message@v1
         with:
           channel: team-dice-cfl-code-review-requests
