@@ -1,0 +1,17 @@
+name: Demo
+
+on:
+  pull_request_review:
+    types:
+      - approved
+      - changes_requested
+  
+  workflow_dispatch:
+jobs:
+  notify_slack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: taylornielson22/slack_message@v1
+        with:
+          channel: team-dice-cfl-code-review-requests
+          slack_webhook: ${{ secrets.WEBHOOK }}
