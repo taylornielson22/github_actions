@@ -37,7 +37,7 @@ jobs:
   #        black: false
   #        flake8: true
   notify_slack:
-    if: github.ref == 'refs/heads/main'
+    if: $${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - uses: taylornielson22/slack_message@v1
