@@ -36,7 +36,7 @@ jobs:
   #       head_sha: ${{ github.event.pull_request.head.sha  }}
   #        black: false
   #        flake8: true
-  notify_slack:
+  test:
     # if: $${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     env:
