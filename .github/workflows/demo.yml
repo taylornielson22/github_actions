@@ -1,14 +1,8 @@
 name: Demo
 
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-    branches: 
-      - 'main'
-      - 'prod'
+  push:
+   tags: [ 'qa-accept' ]
   
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -43,6 +37,7 @@ jobs:
   #        black: false
   #        flake8: true
   notify_slack:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: taylornielson22/slack_message@v1
