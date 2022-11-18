@@ -14,3 +14,9 @@ echo "pushing changes from qa-accept sha to production"
 git merge qa-accept --no-ff -m 'Automated Merge Process: Triggered by qa-accept tag on master'
 git remote set-url --push origin "https://token:$GIT_TOKEN@github.com/$GITHUB_REPOSITORY.git"
 git push origin prod
+
+echo "Updating patch version on master branch"
+git checkout origin main
+#bump2version patch
+echo "hello" > hi.txt
+git push origin main
