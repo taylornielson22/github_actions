@@ -16,7 +16,7 @@ git remote set-url --push origin "https://token:$GIT_TOKEN@github.com/$GITHUB_RE
 git push origin prod
 
 echo "Updating patch version on master branch"
-git checkout origin main
+git checkout main
 git merge prod --no-commit --no-ff
 #bump2version patch
 echo "hello" > hi.txt
