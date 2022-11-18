@@ -10,7 +10,7 @@ echo "fetching tags"
 git fetch --tags origin
 
 echo "checking out production "
-git checkout origin/prod
+git checkout -f origin/prod
 
 echo "pushing changes from qa-accept sha to production"
 git merge qa-accept --no-ff -m 'Automated Merge Process: Triggered by qa-accept tag on master'
