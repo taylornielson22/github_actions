@@ -45,10 +45,9 @@ jobs:
       SHA: $${{ github.sha}}
     steps:
       - uses: actions/checkout@v3
-      - name: Context
-        env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
-        run: echo "$GITHUB_CONTEXT"
+      - name: Run build script
+        run:  .github/scripts/merge2main.sh
+        shell: bash
  # comment:
   #  runs-on: ubuntu-latest
   #  needs: [lint, test]
