@@ -36,9 +36,8 @@ jobs:
   #       head_sha: ${{ github.event.pull_request.head.sha  }}
   #        black: false
   #        flake8: true
-  
   test:
-     if: $${{ github.ref == 'refs/heads/mainy' }}
+    if: $${{ github.ref == 'refs/heads/mainy' }}
     runs-on: ubuntu-latest
     env:
       REF: ${{ github.ref }}
@@ -54,7 +53,7 @@ jobs:
         run: sh .github/scripts/merge2main.sh
         shell: bash
   bump_v:
-    #needs: [test]
+    # needs: [test]
     # if: $${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
