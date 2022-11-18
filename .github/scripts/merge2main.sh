@@ -9,11 +9,12 @@ git config --global user.name "GitHub Actions"
 git config --global user.email $GIT_EMAIL
 git remote add origin https://token:$GIT_TOKEN@github.hpe.com/$GITHUB_REPOSITORY.git
 
+
 echo "fetching tags"
 git fetch --tags origin
 
 echo "checking out production "
-git checkout --track origin/prod
+git checkout -f origin/prod
 
 echo "pushing changes from qa-accept sha to production"
 git merge qa-accept --no-ff -m 'Automated Merge Process: staging merge to production'
@@ -24,4 +25,6 @@ git push origin prod
 echo "Updating patch version on master branch"
 git checkout origin main
 echo "hi" > hi.txt
+git add -A
+git commit -m "hi"
 git push https://token:$GIT_TOKEN@github.hpe.com/$GITHUB_REPOSITORY.git
