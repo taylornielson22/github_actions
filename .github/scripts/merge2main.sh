@@ -8,6 +8,8 @@ git remote add origin https://token:$GIT_TOKEN@github.com/$GITHUB_REPOSITORY.git
 
 echo "fetching tags"
 git fetch --tags origin
+
+echo "update master"
 git checkout -f main
 git merge --strategy-option ours origin/prod
 git checkout prod
