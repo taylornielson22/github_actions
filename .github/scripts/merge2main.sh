@@ -9,9 +9,12 @@ git remote add origin https://token:$GIT_TOKEN@github.com/$GITHUB_REPOSITORY.git
 echo "fetching tags"
 git fetch --tags origin
 
-echo "update master"
-git checkout -f qa-accept
+echo "update main if needed"
+git checkout -f main
 git merge --strategy-option ours origin/prod
+git push origin main
+
+echo "checking out prod"
 git checkout prod
 
 echo "pushing changes from qa-accept sha to production"
