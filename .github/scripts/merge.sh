@@ -16,3 +16,15 @@ echo "pushing changes from qa-accept sha to production"
 git merge qa-accept
 git remote set-url --push origin "https://token:$GIT_TOKEN@github.com/$GITHUB_REPOSITORY.git"
 git push origin prod
+
+git fetch origin 
+
+echo "Updating patch version on master branch"
+git checkout -f main
+
+#bump2version patch
+touch the.txt
+git add the.txt
+git commit -m "Bump Version"
+
+git push origin main
