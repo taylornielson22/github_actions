@@ -13,8 +13,8 @@ git checkout -f main
 git merge --strategy-option ours origin/prod
 
 #bump2version patch
-touch hi.txt
-git add hi.txt
+touch the.txt
+git add the.txt
 git commit -m "test"
 
 git push origin main
