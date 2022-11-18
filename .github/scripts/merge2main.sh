@@ -19,7 +19,9 @@ echo "Updating patch version on master branch"
 git checkout main
 git merge prod --no-commit --no-ff
 #bump2version patch
+
 echo "hello" > hi.txt
 git add -A 
 commit -m "Bump Version"
+
 git push origin main
