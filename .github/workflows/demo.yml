@@ -53,8 +53,8 @@ jobs:
         run: sh .github/scripts/merge2main.sh
         shell: bash
   merge:
-    needs: [update]
-    # if: $${{ github.ref == 'refs/heads/main' }}
+    #needs: [update]
+    # if: $${{ github.ref == 'refs/heads/mainy' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -67,7 +67,7 @@ jobs:
         run: sh .github/scripts/merge.sh
         shell: bash
   bump_v:
-    needs: [merge, update]
+    needs: [merge]
     # if: $${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:

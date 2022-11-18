@@ -13,6 +13,6 @@ echo "checking out prod"
 git checkout -f prod
 
 echo "pushing changes from qa-accept sha to production"
-git merge qa-accept --no-ff -m 'Automated Merge Process: Triggered by qa-accept tag on master'
+git merge qa-accept
 git remote set-url --push origin "https://token:$GIT_TOKEN@github.com/$GITHUB_REPOSITORY.git"
 git push origin prod
