@@ -12,7 +12,7 @@ git fetch --tags origin
 echo "Updating patch version on master branch"
 git checkout -f main
 git remote set-url --push origin "https://token:$GIT_TOKEN@github.com/$GITHUB_REPOSITORY.git"
-git merge --strategy-option ours origin/prod
+git merge origin/prod
 
 echo "checking out prod"
 git checkout -f prod
