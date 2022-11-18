@@ -8,7 +8,7 @@ git remote add origin https://token:$GIT_TOKEN@github.com/$GITHUB_REPOSITORY.git
 
 echo "fetching tags"
 git fetch --tags origin
-git checkout -f production 
+git checkout -f prod
 
 echo "pushing changes from qa-accept sha to production"
 git merge qa-accept --no-ff -m 'Automated Merge Process: Triggered by qa-accept tag on master'
