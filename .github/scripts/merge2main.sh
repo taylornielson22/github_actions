@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 # This script acts as an entrypoint to cfl-doxygen
 set -x
-export GIT_TOKEN="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"
 export GIT_EMAIL="nielson.taylorm@gmail.com"
 
 echo "performing git setting"
