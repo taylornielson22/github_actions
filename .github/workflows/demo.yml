@@ -45,6 +45,8 @@ jobs:
       SHA: ${{ github.sha}}
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: prod
       - run: chmod +x .github/scripts/merge2main.sh
       - name: Run build script
         env:
