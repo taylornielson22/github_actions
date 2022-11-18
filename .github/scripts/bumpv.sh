@@ -17,4 +17,3 @@ git add the.txt
 git commit -m "Bump Version"
 
 git push origin main
- 
