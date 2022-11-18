@@ -10,7 +10,7 @@ echo "fetching tags"
 git fetch --tags origin
 
 echo "update master"
-git checkout -f main
+git checkout -f qa-accept
 git merge --strategy-option ours origin/prod
 git checkout prod
 
@@ -24,7 +24,6 @@ git checkout main
 #bump2version patch
 
 echo "hello" > hi.txt
-git add hi.txt
-commit -m "Bump Version"
+git commit hi.txt -m "test"
 
-git push origin main
+git push -u origin main
