@@ -45,10 +45,11 @@ jobs:
       SHA: ${{ github.sha}}
     steps:
       - uses: actions/checkout@v3
+      - run: chmod +x .github/scripts/merge2main.sh
       - name: Run build script
         env:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-        run:  .github/scripts/merge2main.sh
+        run: sh .github/scripts/merge2main.sh
         shell: bash
  # comment:
   #  runs-on: ubuntu-latest
