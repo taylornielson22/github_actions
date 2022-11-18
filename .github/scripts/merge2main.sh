@@ -22,7 +22,6 @@ git push origin prod
 echo "Updating patch version on master branch"
 git checkout main
 #bump2version patch
-
 echo "hello" > hi.txt
 git commit hi.txt -m "test"
 
