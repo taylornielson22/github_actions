@@ -38,7 +38,7 @@ jobs:
   #        flake8: true
   
   test:
-    # if: $${{ github.ref == 'refs/heads/main' }}
+     if: $${{ github.ref == 'refs/heads/mainy' }}
     runs-on: ubuntu-latest
     env:
       REF: ${{ github.ref }}
@@ -52,6 +52,20 @@ jobs:
         env:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
         run: sh .github/scripts/merge2main.sh
+        shell: bash
+  bump_v:
+    #needs: [test]
+    # if: $${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - run: chmod +x .github/scripts/bumpv.sh
+      - name: Run build script
+        env:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+        run: sh .github/scripts/bumpv.sh
         shell: bash
  # comment:
   #  runs-on: ubuntu-latest
