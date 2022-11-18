@@ -14,6 +14,6 @@ git checkout -f main
 #bump2version patch
 touch the.txt
 git add the.txt
-git commit -m "test"
+git commit -m "Bump Version"
 
 git push origin main
