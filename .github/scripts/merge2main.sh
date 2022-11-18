@@ -8,8 +8,6 @@ git remote add origin https://token:$GIT_TOKEN@github.com/$GITHUB_REPOSITORY.git
 
 git fetch origin 
 
-
-
 echo "Updating patch version on master branch"
 git checkout -f main
 git merge --strategy-option ours origin/prod
