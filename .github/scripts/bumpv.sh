@@ -12,7 +12,7 @@ echo "Updating patch version on master branch"
 git checkout -f main
 
 #bump2version patch
-echo "hi" > the.txt
+touch the.txt
 git add the.txt
 git commit -m "Bump Version"
 
