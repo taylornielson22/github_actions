@@ -20,5 +20,6 @@ git checkout origin main
 git merge prod --no-commit --no-ff
 #bump2version patch
 echo "hello" > hi.txt
-git add -A && commit -m "Bump Version"
+git add -A 
+commit -m "Bump Version"
 git push origin main
