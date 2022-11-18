@@ -10,7 +10,6 @@ git fetch origin
 
 echo "Updating patch version on master branch"
 git checkout -f main
-git merge --strategy-option ours origin/prod
 
 #bump2version patch
 touch the.txt
