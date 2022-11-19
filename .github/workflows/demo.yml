@@ -43,33 +43,7 @@ jobs:
     steps:
       - id: get_version
         run:  echo "version=3.3" >> $GITHUB_OUTPUT
-  create_release:
-    needs: [get_version]
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "version=3.7" >> $GITHUB_ENV
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-        with:
-          tag_name: v${{env.version}}
-          release_name: Release ${{env.version}}
-          body: Release ${{env.version}}
-  merge:
-    #needs: [update]
-    # if: $${{ github.ref == 'refs/heads/mainy' }}
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          ref: prod
-      - run: chmod +x .github/scripts/merge.sh
-      - name: Run build script
-        env:
-          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-        run: sh .github/scripts/merge.sh
-        shell: bash
+
  # comment:
   #  runs-on: ubuntu-latest
   #  needs: [lint, test]
