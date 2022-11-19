@@ -39,15 +39,15 @@ jobs:
   get_version:
     runs-on: ubuntu-latest
     outputs: 
-      version_output: ${{ steps.get_version.outputs.version }}
+      version: ${{ steps.get_version.outputs.version }}
     steps:
       - id: get_version
-        run:  echo "version=3.1" >> $GITHUB_OUTPUT
+        run:  echo "version=3.2" >> $GITHUB_OUTPUT
   create_release:
     needs: [get_version]
     runs-on: ubuntu-latest
     env:
-      version: ${{needs.get_version.outputs.version_output}}
+      version: ${{needs.get_version.outputs.version}}
     steps:
       - name: Create Release
         uses: actions/create-release@v1
