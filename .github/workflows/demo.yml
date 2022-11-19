@@ -47,15 +47,15 @@ jobs:
     needs: [get_version]
     runs-on: ubuntu-latest
     steps:
-      - run: echo "version=3.5" >> $GITHUB_ENV
+      - run: echo "version=3.6" >> $GITHUB_ENV
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         with:
-          tag_name: v${{needs.get_version.outputs.version}}
+          tag_name: v${{env.version}}
           release_name: Release ${{env.version}}
-          body: Release ${{needs.get_version.outputs.version}}
+          body: Release ${{env.version}}
   merge:
     #needs: [update]
     # if: $${{ github.ref == 'refs/heads/mainy' }}
