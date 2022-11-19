@@ -38,19 +38,18 @@ jobs:
   #        flake8: true
   create_release:
     runs-on: ubuntu-latest
-    env:
-      VERSION: v
     steps:
       - name: Prep log
-        run: |
-          echo "VERSION = $(echo 3.1)" >> $GITHUB_ENV
-          echo $VERSION
+        id: get_version
+        run:  echo "version = $(echo 3.1)" >> $GITHUB_OUTPUT
       - name: Create Release
         uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         with:
-          tag_name: v${{env.VERSION}}
-          release_name: Release ${{env.VERSION}}
-          body: Release ${{ env.VERSION }}
+          tag_name: v${{steps.get_version.outputs.version}}
+          release_name: Release ${{steps.get_version.outputs.version}}
+          body: Release ${{steps.get_version.outputs.version}}
   merge:
     #needs: [update]
     # if: $${{ github.ref == 'refs/heads/mainy' }}
