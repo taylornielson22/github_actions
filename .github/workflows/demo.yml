@@ -41,17 +41,15 @@ jobs:
     steps:
       - name: Prep log
         run: |
-          VERSION=3.1.3
-          echo "Setting release version to $VERSION"
-          echo "::set-env name=RELEASE_VERSION::$VERSION"
+          echo "VERSION = $(python setup.py --version)" >> $GITHUB_ENV
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         with:
-          tag_name: v${{ env.RELEASE_VERSION }}
-          release_name: Release ${{ env.RELEASE_VERSION }}
-          body: Release ${{ env.RELEASE_VERSION }}
+          tag_name: v${{ env.VERSION }}
+          release_name: Release ${{ env.VERSION }}
+          body: Release ${{ env.VERSION }}
   merge:
     #needs: [update]
     # if: $${{ github.ref == 'refs/heads/mainy' }}
