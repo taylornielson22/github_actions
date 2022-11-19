@@ -41,7 +41,8 @@ jobs:
     steps:
       - name: Prep log
         run: |
-          echo "VERSION = 3.1" >> $GITHUB_ENV
+          echo "VERSION = $(echo 3.1)" >> $GITHUB_ENV
+          echo $VERSION
       - name: Create Release
         uses: actions/create-release@v1
         env:
