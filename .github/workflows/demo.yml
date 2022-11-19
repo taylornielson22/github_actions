@@ -39,12 +39,13 @@ jobs:
   get_version:
     runs-on: ubuntu-latest
     outputs: 
-      version: ${{ steps.get_version.outputs.v_output }}
+      version: ${{ steps.get_v.outputs.v_output }}
     steps:
       - name: Prep log
-        id: get_version
+        id: get_v
         run:  echo "v_output = $(echo 3.1)" >> $GITHUB_OUTPUT
   create_release:
+    needs: [get_version]
     runs-on: ubuntu-latest
     steps:
       - name: Create Release
