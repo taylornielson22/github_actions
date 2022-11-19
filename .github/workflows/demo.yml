@@ -39,23 +39,24 @@ jobs:
   get_version:
     runs-on: ubuntu-latest
     outputs: 
-      version: ${{ steps.get_v.outputs.v_output }}
+      version_output: ${{ steps.get_version.outputs.version }}
     steps:
-      - name: Prep log
-        id: get_v
-        run:  echo "v_output = $(echo 3.1)" >> $GITHUB_OUTPUT
+      - id: get_version
+        run:  echo "version=3.1" >> $GITHUB_OUTPUT
   create_release:
     needs: [get_version]
     runs-on: ubuntu-latest
+    env:
+      version: ${{needs.get_version.outputs.version_output}}
     steps:
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
         with:
-          tag_name: v${{needs.get_version.outputs.version}}
-          release_name: Release ${{needs.get_version.outputs.version}}
-          body: Release ${{needs.get_version.outputs.version}}
+          tag_name: v${{env.version}}
+          release_name: Release ${{needs.get_version.outputs.version_output}}
+          body: Release ${{needs.get_version.outputs.version_output}}
   merge:
     #needs: [update]
     # if: $${{ github.ref == 'refs/heads/mainy' }}
