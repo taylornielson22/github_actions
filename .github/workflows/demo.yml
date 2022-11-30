@@ -2,7 +2,6 @@ name: Demo
 
 on:
   push:
-   tags: [ 'qa-accept' ]
   
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -37,12 +36,16 @@ jobs:
   #        black: false
   #        flake8: true
   get_version:
-    runs-on: ubuntu-latest
-    outputs: 
-      version: ${{ steps.get_version.outputs.version }}
+    runs-on: python:3.8.10-slim
+    env:
+      PROD: PRODUCTION_ARRAY
     steps:
       - id: get_version
-        run:  echo "version=3.3" >> $GITHUB_OUTPUT
+        run: |
+          echo "secret_array_var=$(echo 'print("${{ inputs.branch }}".upper())' | python3.8 -)_ARRAY" >> $GITHUB_ENV
+          echo "${{ env.secret_array_var }}"
+          echo "${{ secrets[env.secret_array_var] }}"
+          echo "${{ secrets[env.PROD] }}"
 
  # comment:
   #  runs-on: ubuntu-latest
