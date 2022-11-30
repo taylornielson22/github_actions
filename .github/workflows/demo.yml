@@ -46,12 +46,12 @@ jobs:
     container:
       image: python:3.8.10-slim
     steps:
-      - id: get_version
+      - name: get_version
         run: |
-          echo "secret_array_var=$(echo 'print("${{ inputs.branch }}".upper())' | python3.8 -)_ARRAY" >> $GITHUB_ENV
-          echo "${{ env.secret_array_var }}"
-          echo "${{ secrets[env.secret_array_var] }}"
+          echo "SECRET_ARRAY_VAR=$(echo 'print("${{ inputs.branch }}".upper())' | python3.8 -)_ARRAY" >> $GITHUB_ENV
+          echo "${{ secrets[env.SECRET_ARRAY_VAR] }}"
           echo "${{ secrets[env.PROD] }}"
+      - run: echo "${{ env.SECRET_ARRAY_VAR }}"
 
  # comment:
   #  runs-on: ubuntu-latest
