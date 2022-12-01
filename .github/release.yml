@@ -1,0 +1,23 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+    authors:
+      - octocat
+  categories:
+    - title: Product Improvements
+      labels:
+        - enhancement
+    - title: Home Fleet 
+      labels:
+        - home-fleet
+    - title: Product Type Hints and Code Cleanup
+      labels:
+        - type-hints
+        - cleanup
+    - title: CI/CD Workflow 
+      labels:
+        - cicd
+    - title: Other Changes
+      labels:
+        - "*"
