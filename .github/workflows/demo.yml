@@ -46,10 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: echo "VERSION=Release Script" >> $GITHUB_ENV
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16'
+      - run: echo "VERSION=1.2.1" >> $GITHUB_ENV
       - name: "Create release"
         uses: "actions/github-script@v6"
         with:
@@ -58,10 +55,10 @@ jobs:
             try {
               await github.rest.repos.createRelease({
                 generate_release_notes: true,
-                name: process.env.VERSION,
+                name: `Release ${process.env.VERSION}`,
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                tag_name: 'v3.12',
+                tag_name: `v${process.env.VERSION}`,
               });
             } catch (error) {
               core.setFailed(error.message);
