@@ -41,7 +41,7 @@ jobs:
   #        black: false
   #        flake8: true
   create_release:
-    runs-on: [self-hosted, k8s]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - run: echo "VERSION=6" >> $GITHUB_ENV
