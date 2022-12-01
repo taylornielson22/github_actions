@@ -41,11 +41,24 @@ jobs:
   #       head_sha: ${{ github.event.pull_request.head.sha  }}
   #        black: false
   #        flake8: true
+  create_release_action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "version=1.2.0" >> $GITHUB_ENV
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+        with:
+          tag_name: v${{ env.VERSION }}
+          release_name: Release ${{ env.VERSION }}
+          
   create_release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: echo "VERSION=Release 10" >> $GITHUB_ENV
+      - run: echo "VERSION=Release Script" >> $GITHUB_ENV
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -62,7 +75,7 @@ jobs:
                 owner: context.repo.owner,
                 prerelease: false,
                 repo: context.repo.repo,
-                tag_name: 'v3.10',
+                tag_name: 'v3.11',
               });
             } catch (error) {
               core.setFailed(error.message);
