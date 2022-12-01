@@ -47,13 +47,10 @@ jobs:
     container:
       image: python:3.8.10-slim
     steps:
-      - name: get_version
-        run: echo "SECRET_ARRAY_VAR=$(echo 'print("${{ inputs.branch }}".upper())' | python3.8 -)_ARRAY" >> $GITHUB_ENV
-      - name: make file
-        run: |
-          echo "${{ secrets[env.SECRET_ARRAY_VAR] }}"
-          touch ${{ secrets[env.SECRET_ARRAY_VAR] }}.txt
-          ls
+      - name: next release version
+        uses: docker://python:3.8-slim
+        with:
+          entrypoint: .github/scripts/run.sh
 
  # comment:
   #  runs-on: ubuntu-latest
