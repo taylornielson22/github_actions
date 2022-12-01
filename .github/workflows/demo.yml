@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: echo "version=1.2.0" >> $GITHUB_ENV
+      - run: echo "VERSION=1.2.0" >> $GITHUB_ENV
       - name: Create Release
         uses: actions/create-release@v1
         env:
