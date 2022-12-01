@@ -45,8 +45,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: echo "VERSION=Release 6" >> $GITHUB_ENV
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
       - name: "Create release"
-        uses: "actions/github-script@v3"
+        uses: "actions/github-script@v5"
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
