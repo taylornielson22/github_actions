@@ -1,9 +1,7 @@
 changelog:
   exclude:
-    labels:
-      - ignore-for-release
     authors:
-      - CFL Team
+      - github-actions
   categories:
     - title: Product Improvements
       labels:
