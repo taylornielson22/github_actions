@@ -41,18 +41,6 @@ jobs:
   #       head_sha: ${{ github.event.pull_request.head.sha  }}
   #        black: false
   #        flake8: true
-  create_release_action:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - run: echo "VERSION=1.2.0" >> $GITHUB_ENV
-      - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
-        with:
-          tag_name: v${{ env.VERSION }}
-          release_name: Release ${{ env.VERSION }}
           
   create_release:
     runs-on: ubuntu-latest
@@ -69,13 +57,11 @@ jobs:
           script: |
             try {
               await github.rest.repos.createRelease({
-                draft: false,
                 generate_release_notes: true,
                 name: process.env.VERSION,
                 owner: context.repo.owner,
-                prerelease: false,
                 repo: context.repo.repo,
-                tag_name: 'v3.11',
+                tag_name: 'v3.12',
               });
             } catch (error) {
               core.setFailed(error.message);
