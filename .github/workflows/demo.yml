@@ -53,13 +53,13 @@ jobs:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
             const { repo, owner } = context.repo;
-              await github.rest.repos.createRelease({
-                generate_release_notes: true,
-                name: `Release ${process.env.VERSION}`,
-                owner,
-                repo,
-                tag_name: `v${process.env.VERSION}`,
-              });
+            github.rest.repos.createRelease({
+              generate_release_notes: true,
+              name: `Release ${process.env.VERSION}`,
+              owner,
+              repo,
+              tag_name: `v${process.env.VERSION}`,
+            });
 
  # comment:
   #  runs-on: ubuntu-latest
