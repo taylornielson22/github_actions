@@ -52,17 +52,14 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           script: |
-            try {
+            const { repo, owner } = context.repo;
               await github.rest.repos.createRelease({
                 generate_release_notes: true,
                 name: `Release ${process.env.VERSION}`,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                owner,
+                repo,
                 tag_name: `v${process.env.VERSION}`,
               });
-            } catch (error) {
-              core.setFailed(error.message);
-            }
 
  # comment:
   #  runs-on: ubuntu-latest
