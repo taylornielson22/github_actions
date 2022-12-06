@@ -35,6 +35,10 @@ jobs:
   #        python -m pip install pytest
   #    - name: Test
   #      run: pytest
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo '${{ toJSON(github) }}'
   lint:
     uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
     with:
