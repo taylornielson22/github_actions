@@ -3,6 +3,9 @@ name: Demo
 on: # yamllint disable-line rule:truthy
   push:
     branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
+    types: [opened, reopened, synchronize]
  #   tags:
  #     - "qa-accept"
   # Allows you to run this workflow manually from the Actions tab
@@ -39,6 +42,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo '${{ toJSON(github) }}'
+      - run: echo 'base ref ${{ github.event.before }}'
+      - run: echo 'head ref ${{ github.event.after }}'
+      - run: echo 'sha ${{ github.sha }}'
   lint:
     uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
     with:
