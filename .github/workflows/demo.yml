@@ -48,8 +48,8 @@ jobs:
   lint:
     uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
     with:
-          base_sha: ${{ github.event.pull_request.commits }}
-          head_sha: ${{ github.event.pull_request.head.sha  }}
+          base_sha: ${{ github.event.before }}
+          head_sha: ${{ github.sha }}
           black: false
           flake8: true
           
