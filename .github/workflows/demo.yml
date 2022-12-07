@@ -48,7 +48,7 @@ jobs:
           RUN_LINK: ${{ github.event.pull_request.base.repo.html_url }}/actions/runs/${{ github.run_id }}
         with:
           script: |
-            if(/^(TA|ESS|EIT|DEVOPS|AS)-\d{4,6}:.*$/.test(process.env.TITLE)){
+            if(/^(TA|ESS|EIT|DEVOPS|AS)-\d{4,6}:.*\w+.*$/.test(process.env.TITLE)){
               await github.rest.issues.createComment({
                 issue_number: ${{ github.event.number }},
                 owner: context.repo.owner,
