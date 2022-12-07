@@ -78,7 +78,7 @@ jobs:
           script: |
             if(process.env.INVALID == true){
               github.rest.issues.createComment({
-                issue_number: context.issue.number,
+                issue_number: ${{ github.event.number }},
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 body:`Please update PR Title to match the following pattern. 
