@@ -1,0 +1,33 @@
+name: Demo
+
+on: # yamllint disable-line rule:truthy
+  pull_request:
+    branches: [ 'main' ]
+
+    types: [opened, edited]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  validate_pr_title1:
+    env: 
+      TITLE: ${{ github.event.pull_request.title }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Leave comment to change title on PR
+        uses: actions/github-script@v6
+        env:
+          RUN_LINK: ${{ github.event.pull_request.base.repo.html_url }}/actions/runs/${{ github.run_id }}
+        with:
+          script: |
+            if(/^(TA|ESS|EIT|DEVOPS|AS)-\d{4,6}:.*\w+.*$/.test(process.env.TITLE) == false){
+              await github.rest.issues.createComment({
+                issue_number: ${{ github.event.number }},
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body:[`Please **update PR Title** to match the following pattern: **{ticketID}: summary of change**`,
+                `Example: *TA-12345: Update pytest to latest version*\n`,
+                `After updating PR title, navigate to [your workflow run](${process.env.RUN_LINK}) and click "Re-run jobs"`].join('\n')
+              });
+              core.setFailed("Invalid PR Title")
+            }
+

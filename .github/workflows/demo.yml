@@ -1,10 +1,9 @@
 name: Demo
 
 on: # yamllint disable-line rule:truthy
-  push:
-    branches: [ 'main' ]
   pull_request:
     branches: [ 'main' ]
+
     types: [opened, reopened, synchronize]
  #   tags:
  #     - "qa-accept"
@@ -45,13 +44,14 @@ jobs:
       - run: echo 'base ref ${{ github.event.before }}'
       - run: echo 'head ref ${{ github.event.after }}'
       - run: echo 'sha ${{ github.sha }}'
-  lint:
-    uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
-    with:
-          base_sha: ${{ github.event.before }}
-          head_sha: ${{ github.sha }}
-          black: false
-          flake8: true
+
+  #lint:
+  #  uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
+  #  with:
+  #        base_sha: ${{ github.event.before }}
+  #        head_sha: ${{ github.sha }}
+  #        black: false
+  #        flake8: true
           
   #create_release:
   #  runs-on: ubuntu-latest
