@@ -56,10 +56,9 @@ jobs:
                 issue_number: ${{ github.event.number }},
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                body:`Please update PR Title to match the following pattern. 
-                  \t(TA|ESS|EIT|AS|DEVOPS)-{id}: summary of change
-                  \tExample: *TA-12345: Update pytest to latest version*
-                  
+                body:`Please **update PR Title** to match the following pattern: **{ticketID}: summary of change**
+                  Example: *TA-12345: Update pytest to latest version*
+                  \n
                   After updating PR title, navigate to [your workflow run](${process.env.RUN_LINK}) and click "Re-run jobs"`
               });
               core.setFailed("Invalid PR Title")
