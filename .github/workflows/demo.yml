@@ -1,8 +1,6 @@
 name: Demo
 
 on: # yamllint disable-line rule:truthy
-  push:
-    branches: [ 'main' ]
   pull_request:
     branches: [ 'main' ]
     types: [opened, reopened, synchronize]
@@ -38,20 +36,44 @@ jobs:
   #        python -m pip install pytest
   #    - name: Test
   #      run: pytest
+  validate_pr_title:
+    env: 
+      REGEX: ^\(TA\|ESS\|EIT\|DEVOPS\|AS\)-[0-9]{4,6}:.[A-Za-z]+.*$
+      TITLE: ${{ github.event.pull_request.title }}
+    runs-on: [self-hosted, k8s]
+    steps:
+      - run: |
+          [[ $TITLE =~ $REGEX ]] && (echo "INVALID=false" >> $GITHUB_ENV) || (echo "INVALID=true" >> $GITHUB_ENV)
+          echo "PR is valid: $INVALID"
+      - name: Leave comment to change title on PR
+        if: ${{ github.env.INVALID }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body:`Please update PR Title to match the following pattern. 
+                (TA|ESS|EIT|AS|DEVOPS)-{id}: summary of change
+                Example: *TA-12345: Update pytest to latest version*`
+            });
+            core.setFailed("Invalid PR Title")
   print:
+    needs: validate_pr_title
     runs-on: ubuntu-latest
     steps:
       - run: echo '${{ toJSON(github) }}'
       - run: echo 'base ref ${{ github.event.before }}'
       - run: echo 'head ref ${{ github.event.after }}'
       - run: echo 'sha ${{ github.sha }}'
-  lint:
-    uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
-    with:
-          base_sha: ${{ github.event.before }}
-          head_sha: ${{ github.sha }}
-          black: false
-          flake8: true
+  #lint:
+  #  uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
+  #  with:
+  #        base_sha: ${{ github.event.before }}
+  #        head_sha: ${{ github.sha }}
+  #        black: false
+  #        flake8: true
           
   #create_release:
   #  runs-on: ubuntu-latest
