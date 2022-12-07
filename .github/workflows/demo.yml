@@ -43,8 +43,8 @@ jobs:
       TITLE: ${{ github.event.pull_request.title }}
     runs-on: ubuntu-latest
     steps:
-      - run: [[ $TITLE =~ $REGEX ]] && (echo "INVALID=false" >> $GITHUB_ENV) || (echo "INVALID=true" >> $GITHUB_ENV)
-      - run: echo "$INVALID"
+      - run: |
+          [[ $TITLE =~ $REGEX ]] && (echo "INVALID=false" >> $GITHUB_ENV) || (echo "INVALID=true" >> $GITHUB_ENV)
       - name: Leave comment to change title on PR
         uses: actions/github-script@v6
         with:
