@@ -113,7 +113,7 @@ jobs:
             });
             core.setFailed("Invalid PR Title")
   print:
-    needs: validate_pr_title
+    needs: validate_pr_title1
     runs-on: ubuntu-latest
     steps:
       - run: echo '${{ toJSON(github) }}'
