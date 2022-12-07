@@ -41,7 +41,7 @@ jobs:
     env: 
       REGEX: ^\(TA\|ESS\|EIT\|DEVOPS\|AS\)-[0-9]{4,6}:.[A-Za-z]+.*$
       TITLE: ${{ github.event.pull_request.title }}
-    runs-on: [self-hosted, k8s]
+    runs-on: ubuntu-latest
     steps:
       - run: |
           [[ $TITLE =~ $REGEX ]] && (echo "INVALID=false" >> $GITHUB_ENV) || (echo "INVALID=true" >> $GITHUB_ENV)
