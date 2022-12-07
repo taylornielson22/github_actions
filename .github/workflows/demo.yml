@@ -2,7 +2,6 @@ name: Demo
 
 on: # yamllint disable-line rule:truthy
   pull_request:
-    branches: [ 'main' ]
     types: [opened, reopened, synchronize]
  #   tags:
  #     - "qa-accept"
