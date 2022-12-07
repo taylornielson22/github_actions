@@ -59,7 +59,7 @@ jobs:
                 body:`Please update PR Title to match the following pattern. 
                   \t(TA|ESS|EIT|AS|DEVOPS)-{id}: summary of change
                   \tExample: *TA-12345: Update pytest to latest version*
-                  After updating PR title, navigate to your [workflow run](process.env.RUN_LINK) and click "Re-run jobs"`
+                  After updating PR title, navigate to your [workflow run](${{ github.event.RUN_LINK }}) and click "Re-run jobs"`
               });
               core.setFailed("Invalid PR Title")
             }
