@@ -4,7 +4,7 @@ on: # yamllint disable-line rule:truthy
   pull_request:
     branches: [ 'main' ]
 
-    types: [opened, reopened, synchronize, edited]
+    types: [opened, reopened, synchronize]
  #   tags:
  #     - "qa-accept"
   # Allows you to run this workflow manually from the Actions tab
