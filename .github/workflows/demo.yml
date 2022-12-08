@@ -2,7 +2,7 @@ name: Demo
 
 on: # yamllint disable-line rule:truthy
   push:
-    tags: [ 'main' ]
+    tags: [ 't' ]
   pull_request:
     branches: [ 'main' ]
     types: [opened, reopened, synchronize]
