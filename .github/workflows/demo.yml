@@ -41,6 +41,10 @@ jobs:
   print:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.base_ref }}
+      - run: git branch
       - run: echo '${{ toJSON(github) }}'
       - run: echo 'event ${{ toJSON(github.event) }}'
  # lint:
