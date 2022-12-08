@@ -2,7 +2,7 @@ name: Demo
 
 on: # yamllint disable-line rule:truthy
   push:
-    branches: [ 'main' ]
+    tags: [ 'main' ]
   pull_request:
     branches: [ 'main' ]
     types: [opened, reopened, synchronize]
@@ -42,16 +42,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo '${{ toJSON(github) }}'
-      - run: echo 'base ref ${{ github.event.before }}'
-      - run: echo 'head ref ${{ github.event.after }}'
-      - run: echo 'sha ${{ github.sha }}'
-  lint:
-    uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
-    with:
-          base_sha: ${{ github.event.before }}
-          head_sha: ${{ github.sha }}
-          black: false
-          flake8: true
+      - run: echo 'event ${{ toJSON(github.event) }}'
+ # lint:
+ #   uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
+ #   with:
+ #         base_sha: ${{ github.event.before }}
+ #         head_sha: ${{ github.sha }}
+ #         black: false
+ #         flake8: true
           
   #create_release:
   #  runs-on: ubuntu-latest
