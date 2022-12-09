@@ -42,7 +42,7 @@ jobs:
     uses: taylornielson22/github_actions/.github/workflows/_bump_version.yml@main
     with: 
       GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
-      GIT_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+      GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
     
   print:
     runs-on: ubuntu-latest
