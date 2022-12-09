@@ -3,7 +3,6 @@ name: Demo
 
 on: # yamllint disable-line rule:truthy
   push:
-    tags: [ 't' ]
   pull_request:
     branches: [ 'main' ]
     types: [opened, reopened, synchronize]
@@ -39,6 +38,9 @@ jobs:
   #        python -m pip install pytest
   #    - name: Test
   #      run: pytest
+  bump_version:
+    uses: taylornielson22/github_actions/.github/workflows/_bump_version.yml@main
+    
   print:
     runs-on: ubuntu-latest
     steps:
