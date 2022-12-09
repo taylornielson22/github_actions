@@ -25,6 +25,15 @@ jobs:
     container:
       image: python:3.8-slim
       env: 
+        # GIT enviroment variables required for pushing to eig/cfl_docs
+        GIT_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
+        GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+        # Version type to bump in master
         VER_TYPE: ${{ inputs.ver_type }}
     steps:
-      - run: echo "$VER_TYPE" 
+      - uses: actions/checkout@v3
+        with:
+          ref: main
+      - run: chmod +x .github/scripts/bumpv.sh
+      - name: Run bump_version.sh script
+        run: sh .github/scripts/bumpv.sh
