@@ -19,9 +19,9 @@ on:
         required: false
         default: patch
     secrets:
-      git_email:
+      GIT_USER_EMAIL:
         required: true
-      git_token:
+      GIT_TOKEN:
         required: true
 
 
