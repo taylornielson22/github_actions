@@ -31,7 +31,7 @@ jobs:
         # Version type to bump in master
         VER_TYPE: ${{ inputs.ver_type }}
     steps:
-      - run: sudo apt update && sudo apt-get install -y git
+      - run: apt update && apt-get install -y git
       - uses: actions/checkout@v3
         with:
           ref: main
