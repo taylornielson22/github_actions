@@ -1,0 +1,30 @@
+name: Bump Package Version
+
+on:
+  # Allows you to call this workflow from actions tab.
+  # Should be used to bump the minor or major version in master
+  workflow_dispatch:
+    inputs:
+      ver_type:
+        type: string
+        required: true
+        description: 'Version type to bump in master'
+        default: minor
+
+  # cd.yml calls this workflow to bump patch version on new releases      
+  workflow_call:
+    inputs:
+      ver_type:
+        type: string
+        required: true
+        default: patch
+
+jobs:
+  bump_version:
+    runs-on: ubuntu-latest
+    container:
+      image: python:3.8-slim
+      env: 
+        VER_TYPE: ${{ inputs.ver_type }}
+    steps:
+      - uses: echo "$VER_TYPE" 
