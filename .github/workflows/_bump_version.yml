@@ -27,4 +27,4 @@ jobs:
       env: 
         VER_TYPE: ${{ inputs.ver_type }}
     steps:
-      - uses: echo "$VER_TYPE" 
+      - run: echo "$VER_TYPE" 
