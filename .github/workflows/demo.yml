@@ -48,7 +48,7 @@ jobs:
           fetch-depth: 0
       - name: Get changed files
         run: |
-          CONFIGS=$(git diff --name-only 11504b57c32b34ac0a1349233a84017654d519b f274e36376813308bec0f8a26167c81a911f3157 .github/*/_bump_version.yml) 
+          CONFIGS=$(git diff --name-only 11504b57c32b34ac0a1349233a84017654d519b f274e36376813308bec0f8a26167c81a911f3157 .github/workflows/_bump_version.yml) 
           echo $CONFIGS > configs.txt
           echo "CONFIGS=$(cat configs.txt)" >> $GITHUB_ENV
           echo "REQUIREMENTS=$(echo $(git diff --name-only 11504b57c32b34ac0a1349233a84017654d519b f274e36376813308bec0f8a26167c81a911f3157 .github/*/demo.yml))" >> $GITHUB_ENV
