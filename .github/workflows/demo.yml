@@ -61,7 +61,7 @@ jobs:
         id: configs
         run: |
          CONFIGS="$(echo $CONFIGS | sed 's/\/_bump_version.yml//g')"
-         CONFIGS="$(echo $CONFIGS | sed 's/github\///g')"
+         CONFIGS="${CONFIGS/github\///}"
          CONFIGS=$(echo $CONFIGS | jq -R -s -c 'split(" ")[:-1]')
          echo "matrix=$CONFIGS" >> $GITHUB_OUTPUT 
       - run: echo "$matrix"
