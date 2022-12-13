@@ -52,7 +52,7 @@ jobs:
           fetch-depth: 0
       - name: Get changed files
         run: |
-          echo "CONFIGS=$(git diff --name-only ${{ github.before }} ${{ github.sha }} .github/workflows/_bump_version.yml)" >> $GITHUB_ENV 
+          echo "CONFIGS=$(git diff --name-only ${{ github.before }} ${{ github.sha }})" >> $GITHUB_ENV 
           echo "REQUIREMENTS=$(git diff --name-only ${{ github.before }} ${{ github.sha }} .github/*/demo.yml)" >> $GITHUB_ENV
       - name: Check if requirements changed
         if:  "contains(env.REQUIREMENTS, 'demo') &&  !contains(env.CONFIGS, 'scripts')"
