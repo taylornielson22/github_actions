@@ -48,10 +48,10 @@ jobs:
           fetch-depth: 0
       - name: Get changed files
         run: |
-          CONFIGS=$(git diff --name-only {{ github.event.before }} ${{ github.event.after }} .github/*/_bump_version.yml) 
+          CONFIGS=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} .github/*/_bump_version.yml) 
           echo $CONFIGS > configs.txt
           echo "CONFIGS=$(cat configs.txt)" >> $GITHUB_ENV
-          echo "REQUIREMENTS=$(echo $(git diff --name-only {{ github.event.before }} ${{ github.event.after }} .github/*/demo.yml))" >> $GITHUB_ENV
+          echo "REQUIREMENTS=$(echo $(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} .github/*/demo.yml))" >> $GITHUB_ENV
       - name: Check if requirements changed
         if:  "contains(env.REQUIREMENTS, 'demo') &&  !contains(env.CONFIGS, 'bump_version')"
         run: echo $CONFIGS py38-cfl-pytest-container > configs.txt
