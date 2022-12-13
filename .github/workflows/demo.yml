@@ -61,12 +61,10 @@ jobs:
         id: configs
         shell: bash
         run: |
-         CONFIGS="${CONFIGS//\/_bump_version.yml/}" 
-         CONFIGS="${CONFIGS//.github\///}"
+         CONFIGS="$(echo $ CONFIGS | sed 's/\/_bump_version.yml//g')"
+         CONFIGS="$(echo $ CONFIGS | sed 's/.github\///g')"
          CONFIGS=$(echo $CONFIGS | jq -R -s -c 'split(" ")[:-1]')
          echo "matrix=$CONFIGS" >> $GITHUB_OUTPUT 
-         CONFIGS=$(echo $CONFIGS| jq -R -s -c 'split(" ")[:-1]')
-         echo "matrix=$CONFIGS" >> $GITHUB_OUTPUT   
       - run: echo "$matrix"
   #bump_version:
   #  uses: taylornielson22/github_actions/.github/workflows/_bump_version.yml@main
