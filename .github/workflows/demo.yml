@@ -60,6 +60,10 @@ jobs:
       - name: Set changed_configs output
         id: configs
         run: |
+         CONFIGS="${CONFIGS//\/_bump_version.yml/}" 
+         CONFIGS="${CONFIGS//.github\///}"
+         CONFIGS=$(echo $CONFIGS | jq -R -s -c 'split(" ")[:-1]')
+         echo "matrix=$CONFIGS" >> $GITHUB_OUTPUT 
          CONFIGS=$(echo $CONFIGS| jq -R -s -c 'split(" ")[:-1]')
          echo "matrix=$CONFIGS" >> $GITHUB_OUTPUT   
       - run: echo "$matrix"
