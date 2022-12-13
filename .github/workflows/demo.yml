@@ -59,6 +59,7 @@ jobs:
         run: echo "CONFIGS=$CONFIGS py38-cfl-pytest-container" >> $GITHUB_ENV
       - name: Set changed_configs output
         id: configs
+        shell: bash
         run: |
          CONFIGS="${CONFIGS//\/_bump_version.yml/}" 
          CONFIGS="${CONFIGS//.github\///}"
