@@ -52,7 +52,7 @@ jobs:
           fetch-depth: 0
       - name: Get changed files
         run: |
-          echo "CONFIGS=$(git diff --name-only 11504b57c32b34ac0a1349233a84017654d519b f274e36376813308bec0f8a26167c81a911f3157 | tr '\n' ' ')" >> $GITHUB_ENV 
+          echo "CONFIGS=docker_configs/cfl_cicd/py38-cfl-pytest-container/Dockerfile " >> $GITHUB_ENV 
           echo "REQUIREMENTS=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | tr '\n' ' ')" >> $GITHUB_ENV
       - name: Check if requirements changed
         if:  "contains(env.REQUIREMENTS, 'demo') &&  !contains(env.CONFIGS, 'scripts')"
@@ -60,9 +60,10 @@ jobs:
       - name: Set changed_configs output
         id: configs
         run: |
-         CONFIGS="$(echo $CONFIGS | sed 's/\/_bump_version.yml//g')"
-         CONFIGS="${CONFIGS/github\///}"
+         CONFIGS="$(echo $CONFIGS | sed 's/\/Dockerfile//g')"
+         CONFIGS="$(echo $CONFIGS | sed 's/docker_configs\/cfl_cicd\///g')"
          CONFIGS=$(echo $CONFIGS | jq -R -s -c 'split(" ")[:-1]')
+         echo "matrix=$CONFIGS" >> $GITHUB_OUTPUT 
          echo "matrix=$CONFIGS" >> $GITHUB_OUTPUT 
       - run: echo "$matrix"
   #bump_version:
