@@ -52,14 +52,16 @@ jobs:
           fetch-depth: 0
       - name: Get changed files
         run: |
-          echo `CONFIGS=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | jq -R -s -c 'split("\n")[:-1]')` >> $GITHUB_ENV 
+          echo "CONFIGS=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})" >> $GITHUB_ENV 
           echo "REQUIREMENTS=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})" >> $GITHUB_ENV
       - name: Check if requirements changed
         if:  "contains(env.REQUIREMENTS, 'demo') &&  !contains(env.CONFIGS, 'scripts')"
-        run: echo `CONFIGS=$(echo $CONFIGS | jq '. + [ "py38-cfl-pytest-container" ]')` >> $GITHUB_ENV 
+        run: echo "CONFIGS=$CONFIGS py38-cfl-pytest-container" >> $GITHUB_ENV
       - name: Set changed_configs output
         id: configs
-        run: echo "matrix=$CONFIGS" >> $GITHUB_OUTPUT   
+        run: |
+         CONFIGS=(echo $CONFIGS| jq -R -s -c 'split("\n")[:-1]')
+         echo "matrix=$CONFIGS" >> $GITHUB_OUTPUT   
       - run: echo "$matrix"
   #bump_version:
   #  uses: taylornielson22/github_actions/.github/workflows/_bump_version.yml@main
