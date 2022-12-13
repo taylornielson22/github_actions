@@ -57,7 +57,7 @@ jobs:
         run: echo "CONFIGS=$(echo $CONFIGS py38-cfl-pytest-container)" >> $GITHUB_ENV
       - name: Set changed_configs output
         id: configs
-        run: echo "changed_configs=$(echo $CONFIGS)" >> $GITHUB_OUTPUT
+        run: echo "changed_configs=$CONFIGS" >> $GITHUB_OUTPUT
   #bump_version:
   #  uses: taylornielson22/github_actions/.github/workflows/_bump_version.yml@main
   #  secrets: 
