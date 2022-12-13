@@ -53,7 +53,7 @@ jobs:
           echo "CONFIGS=$(cat configs.txt)" >> $GITHUB_ENV
           echo "REQUIREMENTS=$(echo $(git diff --name-only 11504b57c32b34ac0a1349233a84017654d519b ${{ github.sha }} .github/*/demo.yml))" >> $GITHUB_ENV
       - name: Check if requirements changed
-        if:  "contains(env.REQUIREMENTS, 'demo') &&  !contains(env.CONFIGS, 'bump_version')"
+        if:  "contains(env.REQUIREMENTS, 'demo') &&  !contains(env.CONFIGS, 'scripts')"
         run: echo "CONFIGS=$CONFIGS py38-cfl-pytest-container" >> $GITHUB_ENV
       - name: Set changed_configs output
         id: configs
