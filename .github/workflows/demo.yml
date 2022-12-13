@@ -46,7 +46,8 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: apt-get install -y jq
+      - run: apt-get update
+      - run: apt-get install -y jq git
       - name: Get changed files
         run: |
           echo "CONFIGS=$(git diff --name-only 11504b57c32b34ac0a1349233a84017654d519b f274e36376813308bec0f8a26167c81a911f3157 .github/workflows/_bump_version.yml) >> $GITHUB_ENV 
