@@ -42,6 +42,8 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: python:3.8-slim
+    outputs:
+      matrix: ${{ steps.configs.outputs.matrix }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -58,8 +60,7 @@ jobs:
       - name: Set changed_configs output
         id: configs
         run: echo "matrix=$(echo $CONFIGS | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT   
-    outputs:
-      matrix: ${{ steps.configs.outputs.matrix }}
+      - run: echo "$matrix"
   #bump_version:
   #  uses: taylornielson22/github_actions/.github/workflows/_bump_version.yml@main
   #  secrets: 
@@ -74,7 +75,8 @@ jobs:
       matrix:
         service: ${{fromJson(needs.changed_docker_configs.outputs.matrix) }}
     steps:
-      - run: echo '${{ matrix.service }}'
+      - run: echo ${{ matrix.service }}
+      - run: echo ${{ needs.changed_docker_configs.outputs.matrix }}
      # - run: echo 'event ${{ toJSON(github.event) }}'
  # lint:
  #   uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
