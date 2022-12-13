@@ -45,11 +45,11 @@ jobs:
     outputs:
       matrix: ${{ steps.configs.outputs.matrix }}
     steps:
+      - run: apt-get update
+      - run: apt-get install -y jq git
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: apt-get update
-      - run: apt-get install -y jq git
       - name: Get changed files
         run: |
           echo "CONFIGS=$(git diff --name-only ${{ github.before }} ${{ github.sha }} .github/workflows/_bump_version.yml)" >> $GITHUB_ENV 
