@@ -40,23 +40,23 @@ jobs:
   #      run: pytest
   changed_docker_configs:
     runs-on: ubuntu-latest
-    outputs:
-      changed_configs: ${{ steps.configs.outputs.changed_configs}}
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - run: apk add --no-cache jq
       - name: Get changed files
         run: |
-          echo "CONFIGS=$(git diff --name-only 11504b57c32b34ac0a1349233a84017654d519b f274e36376813308bec0f8a26167c81a911f3157 .github/workflows/_bump_version.yml)" >> $GITHUB_ENV 
-          
+          echo "CONFIGS=$(git diff --name-only 11504b57c32b34ac0a1349233a84017654d519b f274e36376813308bec0f8a26167c81a911f3157 .github/workflows/_bump_version.yml) >> $GITHUB_ENV 
           echo "REQUIREMENTS=$(echo $(git diff --name-only 11504b57c32b34ac0a1349233a84017654d519b ${{ github.sha }} .github/*/demo.yml))" >> $GITHUB_ENV
       - name: Check if requirements changed
         if:  "contains(env.REQUIREMENTS, 'demo') &&  !contains(env.CONFIGS, 'scripts')"
-        run: echo "CONFIGS=$CONFIGS py38-cfl-pytest-container" >> $GITHUB_ENV
+        run: echo "CONFIGS=${CONFIGS} 'py38-cfl-pytest-container']" >> $GITHUB_ENV
       - name: Set changed_configs output
         id: configs
-        run: echo "changed_configs=$CONFIGS" >> $GITHUB_OUTPUT
+        run: echo "matrix=$(echo $CONFIGS | jq -R -s -c 'split("\n")[:-1]')" >> $GITHUB_OUTPUT   
+    outputs:
+      matrix: ${{ steps.configs.outputs.matrix }}
   #bump_version:
   #  uses: taylornielson22/github_actions/.github/workflows/_bump_version.yml@main
   #  secrets: 
@@ -66,8 +66,12 @@ jobs:
   print:
     needs: changed_docker_configs
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service: ${{fromJson(needs.changed_docker_configs.outputs.matrix) }}
     steps:
-      - run: echo '${{ needs.changed_docker_configs.outputs.changed_configs }}'
+      - run: echo '${{ matrix.service }}'
      # - run: echo 'event ${{ toJSON(github.event) }}'
  # lint:
  #   uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
