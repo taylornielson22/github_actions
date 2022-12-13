@@ -60,7 +60,7 @@ jobs:
       - name: Set changed_configs output
         id: configs
         run: |
-         CONFIGS=(echo $CONFIGS| jq -R -s -c 'split("\n")[:-1]')
+         CONFIGS=$(echo $CONFIGS| jq -R -s -c 'split("\n")[:-1]')
          echo "matrix=$CONFIGS" >> $GITHUB_OUTPUT   
       - run: echo "$matrix"
   #bump_version:
