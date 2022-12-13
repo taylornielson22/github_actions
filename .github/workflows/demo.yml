@@ -41,12 +41,12 @@ jobs:
   changed_docker_configs:
     runs-on: ubuntu-latest
     container:
-      image: alpine:latest
+      image: python:3.8-slim
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: apk add --no-cache jq
+      - run: apt-get install -y jq
       - name: Get changed files
         run: |
           echo "CONFIGS=$(git diff --name-only 11504b57c32b34ac0a1349233a84017654d519b f274e36376813308bec0f8a26167c81a911f3157 .github/workflows/_bump_version.yml) >> $GITHUB_ENV 
