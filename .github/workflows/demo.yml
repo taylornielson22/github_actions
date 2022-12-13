@@ -54,10 +54,10 @@ jobs:
           echo "REQUIREMENTS=$(echo $(git diff --name-only ${{ github.event.before }} ${{ github.event.after }} .github/*/demo.yml))" >> $GITHUB_ENV
       - name: Check if requirements changed
         if:  "contains(env.REQUIREMENTS, 'demo') &&  !contains(env.CONFIGS, 'bump_version')"
-        run: echo $CONFIGS py38-cfl-pytest-container > configs.txt
+        run: echo CONFIGS=$(echo $CONFIGS py38-cfl-pytest-container)" >> $GITHUB_ENV
       - name: Set changed_configs output
         id: configs
-        run: echo "changed_configs=$(cat configs.txt)" >> $GITHUB_OUTPUT
+        run: echo "changed_configs=$(echo $CONFIGS)" >> $GITHUB_OUTPUT
   #bump_version:
   #  uses: taylornielson22/github_actions/.github/workflows/_bump_version.yml@main
   #  secrets: 
