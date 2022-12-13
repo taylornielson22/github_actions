@@ -42,8 +42,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       changed_configs: ${{ steps.configs.outputs.changed_configs}}
-    container:
-      image: eig/cicd/cicd-essentials
     steps:
       - uses: actions/checkout@v3
         with:
