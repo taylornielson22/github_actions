@@ -3,9 +3,11 @@ name: Demo
 
 on: # yamllint disable-line rule:truthy
   push:
+    paths-ignore: ['bump.txt']
   pull_request:
     branches: [ 'main' ]
     types: [opened, reopened, synchronize]
+    
  #   tags:
  #     - "qa-accept"
   # Allows you to run this workflow manually from the Actions tab
@@ -80,14 +82,14 @@ jobs:
       - run: apt-get install -y jq git
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.GIT_TOKEN }}
+          # token: ${{ secrets.GIT_TOKEN }}
           ref: main
       - name: Git Push
         run: |
           git config --local user.name github-actions
           git config --local user.email github-actions@users.noreply.github.com
           git checkout -f main
-          echo bump > bump.txt
+          echo bump >> bump.txt
           git add -A
           git commit -m "Bump V"
           git push
