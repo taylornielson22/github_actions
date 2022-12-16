@@ -73,37 +73,10 @@ jobs:
   #  secrets: 
   #    GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
   #    GIT_USER_EMAIL: ${{ secrets.GIT_USER_EMAIL }}
-  push_protected:
-    runs-on: ubuntu-latest
-    container:
-      image: python:3.8-slim
-    steps:
-      - run: apt-get update
-      - run: apt-get install -y jq git
-      - uses: actions/checkout@v3
-        with:
-          # token: ${{ secrets.GIT_TOKEN }}
-          ref: main
-      - name: Git Push
-        run: |
-          git config --local user.name github-actions
-          git config --local user.email github-actions@users.noreply.github.com
-          git checkout -f main
-          echo bump >> bump.txt
-          git add -A
-          git commit -m "Bump V"
-          git push
-  #print:
-  #  needs: changed_docker_configs
-  #  runs-on: ubuntu-latest
-  #  strategy:
-  #    fail-fast: false
-  #    matrix:
-  #      service: ${{fromJson(needs.changed_docker_configs.outputs.matrix) }}
-  #  steps:
-  #    - run: echo ${{ matrix.service }}
-  #    - run: echo ${{ needs.changed_docker_configs.outputs.matrix }}
-     # - run: echo 'event ${{ toJSON(github.event) }}'
+  print:
+    uses: taylornielson22/github_actions/.github/workflows/single_jobs/_print.yml@main
+    with:
+      json_data: toJSON(github.event)
  # lint:
  #   uses: taylornielson22/github_actions/.github/workflows/_linter.yml@main
  #   with:
