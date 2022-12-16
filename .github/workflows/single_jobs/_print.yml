@@ -1,0 +1,14 @@
+name: Job
+
+on:
+  workflow_call:
+    inputs:
+      json_data:
+        type: string
+        required: true
+        
+jobs:
+  print:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ inputs.json_data }}
