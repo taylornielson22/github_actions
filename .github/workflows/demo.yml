@@ -3,7 +3,6 @@ name: Demo
 
 on: # yamllint disable-line rule:truthy
   push:
-    paths-ignore: ['bump.txt']
   pull_request:
     branches: [ 'main' ]
     types: [opened, reopened, synchronize]
@@ -85,24 +84,24 @@ jobs:
  #         black: false
  #         flake8: true
           
-  #create_release:
-  #  runs-on: ubuntu-latest
-   # steps:
-  #    - uses: actions/checkout@v3
-   #   - run: echo "VERSION=1.2.1" >> $GITHUB_ENV
-   #   - name: "Create release"
-   #     uses: "actions/github-script@v6"
-   #     with:
-   #       github-token: "${{ secrets.GITHUB_TOKEN }}"
-    #      script: |
-    #        const { repo, owner } = context.repo;
-    #        github.rest.repos.createRelease({
-   #           generate_release_notes: true,
-   #           name: `Release ${process.env.VERSION}`,
-  #            owner,
-   #           repo,
-   #           tag_name: `v${process.env.VERSION}`,
-   #         });
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo "VERSION=2.3.3" >> $GITHUB_ENV
+      - name: "Create release"
+        uses: "actions/github-script@v6"
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          script: |
+            const { repo, owner } = context.repo;
+            github.rest.repos.createRelease({
+              generate_release_notes: true,
+              name: `${process.env.VERSION}`,
+              owner,
+              repo,
+              tag_name: `${process.env.VERSION}`,
+            });
 
  # comment:
   #  runs-on: ubuntu-latest
