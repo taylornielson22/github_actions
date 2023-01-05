@@ -9,6 +9,7 @@ jobs:
     container:
       image: python:3.8-slim
     steps:
+      - run: apt-get update
       - run: apt-get install -y jq git
       - name: Create message with release notes
         run: |
