@@ -15,9 +15,11 @@ jobs:
         run: |
           NOTES=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/1.2.1" | jq '.body')
           NOTES="*Changes*\n"$(echo $body | sed '/^[*] /!d')
-          echo "NOTES=$NOTES" >> GITHUB_ENV
+          echo "NOTES='*Changes*\n'$(echo $body | sed '/^[*] /!d') >> GITHUB_ENV
         #  echo "NOTES=$NOTES${{ secrets.INSTRUCT }}" >> GITHUB_ENV
       - uses: taylornielson22/slack_message@v1
+        env:
+          NOTES: ${{ env.NOTES }}
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
