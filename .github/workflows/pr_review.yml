@@ -27,8 +27,8 @@ jobs:
       - uses: taylornielson22/slack_message@v1
         env: 
           RElEASE_URL: ${{ env.REPO_URL }}/releases/tag/${{ env.VERSION }}
-          TITLE: "*New CFL package ${{ env.VERSION }} released!*\n${{ env.RElEASE_URL }}"
+          TITLE: "*New CFL package ${{ env.VERSION }} released!*"
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
-          message: ${{ env.TITLE }}\n${{ env.RELEASE_NOTES }}
+          message: ${{ env.TITLE }}\n${{ env.RElEASE_URL }}"\n${{ env.RELEASE_NOTES }}
