@@ -6,10 +6,10 @@ SLACK_MSG_CONTENTS=slack_msg.txt
 APPEND_MSG_FILE=.github/release_msg_note.txt
 
 # Paste Title & Release URL into $SLACK_MSG_CONTENTS file
-echo "*New ${PACKAGE_NAME} package v${VERSION} released!*" > $SLACK_MSG_CONTENTS
-echo "=======================================" >> $SLACK_MSG_CONTENTS
-echo "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${VERSION}" >> $SLACK_MSG_CONTENTS
-echo "\n\n*Changes*" >> $SLACK_MSG_CONTENTS
+TITLE="*New ${PACKAGE_NAME} package v${VERSION} released!*"
+LINE_BREAK="\n=======================================\n"
+RElEASE_SERVER_URL="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/tag/${VERSION}"
+echo -e "${TITLE}${LINE_BREAK}${RElEASE_SERVER_URL}\n\n*Changes*" > $SLACK_MSG_CONTENTS
 
 # Grab Release Notes from latest release
 RELEASE_API_URL="${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${VERSION}"
