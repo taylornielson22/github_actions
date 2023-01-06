@@ -13,12 +13,12 @@ jobs:
       - run: apt-get install -y jq git curl
       - name: Create message with release notes
         run: |
-          NOTES=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/v1.2.1" | jq '.body')
-          echo $NOTES
-          NOTES="*Changes*\n$(echo $NOTES | sed '/^[*] /!d')"
+          NOTE=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/v1.2.1" | jq '.body')
+          echo $NOTE
+          NOTE="*Changes*\n$(echo $NOTE | sed '/^[*] /!d')"
           echo "OUTPUT:"
-          echo $NOTES
-          echo "NOTES=$NOTES" >> $GITHUB_ENV
+          echo $NOTE
+          echo "NOTES=$NOTE" >> $GITHUB_ENV
         #  NOTES="*Changes*\n"$(echo $body | sed '/^[*] /!d')
         #  echo "NOTES=$NOTES${{ secrets.INSTRUCT }}" >> GITHUB_ENV
       - name: echo NOTES
