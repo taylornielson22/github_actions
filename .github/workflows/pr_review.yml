@@ -21,10 +21,6 @@ jobs:
           echo "NOTES=$NOTE" >> $GITHUB_ENV
         #  NOTES="*Changes*\n"$(echo $body | sed '/^[*] /!d')
         #  echo "NOTES=$NOTES${{ secrets.INSTRUCT }}" >> GITHUB_ENV
-      - name: echo NOTES
-        env:
-          NOTES: ${{ env.NOTES }}
-        run: echo $NOTES   
       - uses: taylornielson22/slack_message@v1
         env:
           NOTES: ${{ env.NOTES }}
