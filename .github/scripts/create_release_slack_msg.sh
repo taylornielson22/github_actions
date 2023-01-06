@@ -21,7 +21,7 @@ NOTES=$(echo "$NOTES" | sed '/^[*] /!d' | sed 's/* //g')
 NOTES=$(echo "$NOTES" | sed "s+${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/pull/+#+g")
 
 # Append $NOTES & .github/release_msg_note.txt into $SLACK_MSG_CONTENTS file
-echo "*Changes*$NOTES"  >> $SLACK_MSG_CONTENTS
+echo "$NOTES"  >> $SLACK_MSG_CONTENTS
 cat $APPEND_MSG_FILE >> $SLACK_MSG_CONTENTS
 
 # Set multi-line SLACK_MESSAGE enviroment = text in $SLACK_MSG_CONTENTS file
