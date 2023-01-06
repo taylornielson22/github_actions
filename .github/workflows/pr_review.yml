@@ -11,19 +11,18 @@ jobs:
     steps:
       - run: apt-get update
       - run: apt-get install -y jq git curl
-      - name: Create message with release notes
+      - name: Create message from release notes
         run: |
-          NOTE=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/v1.2.1" | jq '.body')
-          echo "*Changes*" > notes.txt
-          echo $NOTE | sed '/^[*] /!d' | sed 's/* //g' >> notes.txt
-          echo 'NOTES<<EOF' >> $GITHUB_ENV
-          cat notes.txt >> $GITHUB_ENV
+          release_notes=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/v1.2.1" | jq '.body')
+          echo $release_notes | sed '/^[*] /!d' | sed 's/* //g' | sed's+${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/pull/+#+g' > summary.txt
+          echo 'RELEASE_SUMMARY<<EOF' >> $GITHUB_ENV
+          cat summary.txt >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - uses: taylornielson22/slack_message@v1
         env:
-          NOTES: ${{ env.NOTES }}
+          NOTES: ${{ env.RELEASE_SUMMARY}}
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
-          message: "${{ env.NOTES }} ${{ secrets.INSTRUCT }}"
+          message: "*Changes*\n${{ env.RELEASE_SUMMARY }} ${{ secrets.INSTRUCT }}"
           message_title: "*New CFL package v1.2.1 released!*"
