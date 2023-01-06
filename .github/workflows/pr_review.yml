@@ -19,8 +19,6 @@ jobs:
           cat summary.txt >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - uses: taylornielson22/slack_message@v1
-        env:
-          NOTES: ${{ env.RELEASE_SUMMARY}}
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
