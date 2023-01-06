@@ -22,11 +22,13 @@ jobs:
           echo $NOTES | sed '/^[*] /!d' | sed 's/* //g' | sed "s+${REPO_URL}/pull/+#+g" > notes.txt 
           cat .github/release_msg_note.txt >> notes.txt
           echo 'RELEASE_NOTES<<EOF' >> $GITHUB_ENV
-          cat notes.txt >> $GITHUB_ENV
+          echo "*Changes*\n$(cat notes.txt)" >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - uses: taylornielson22/slack_message@v1
+        env: 
+          RElEASE_URL: ${{ env.REPO_URL }}/releases/tag/${{ env.VERSION }}
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
           message: "*Changes*\n${{ env.RELEASE_NOTES }}"
-          message_title: "*New CFL package ${{ env.VERSION }} released!*\n${{ env.REPO_URL }}/releases/tag/${{ env.VERSION }}"
+          message_title: "*New CFL package ${{ env.VERSION }} released!*\n${{ env.RElEASE_URL }}"
