@@ -16,7 +16,7 @@ jobs:
       - run: apt-get install -y jq git curl
       - uses: actions/checkout@v3
       - name: Get Package Name
-        run: echo "PACKAGE_NAME=$(python setup.py --name)" >> $GITHUB_ENV
+        run: echo "PACKAGE_NAME=nimble-cfl" >> $GITHUB_ENV
       - name: Create message from release notes
         run: |
           API_URL="${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${VERSION}"
