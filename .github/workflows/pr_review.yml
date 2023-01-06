@@ -8,19 +8,24 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: python:3.8-slim
+      env:
+        REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+        VERSION: 1.2.1
     steps:
       - run: apt-get update
       - run: apt-get install -y jq git curl
       - name: Create message from release notes
         run: |
-          release_notes=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/v1.2.1" | jq '.body')
-          echo $release_notes | sed '/^[*] /!d' | sed 's/* //g' | sed 's+${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/pull/+#+g' > summary.txt
-          echo 'RELEASE_SUMMARY<<EOF' >> $GITHUB_ENV
-          cat summary.txt >> $GITHUB_ENV
+          API_URL="${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${VERSION}"
+          NOTES=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${API_URL}" | jq '.body')
+          echo $NOTES | sed '/^[*] /!d' | sed 's/* //g' | sed 's+${REPO_URL}/pull/+#+g' > notes.txt 
+          cat .github/workflows/release_msg_note.txt >> notes.txt
+          echo 'RELEASE_NOTES<<EOF' >> $GITHUB_ENV
+          cat notes.txt >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - uses: taylornielson22/slack_message@v1
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
-          message: "*Changes*\n${{ env.RELEASE_SUMMARY }} ${{ secrets.INSTRUCT }}"
-          message_title: "*New CFL package v1.2.1 released!*"
+          message: "*Changes*\n${{ env.RELEASE_NOTES }} ${{ secrets.INSTRUCT }}"
+          message_title: "*New CFL package v1.2.1 released!*\n${{ env.REPO_URL }}/releases/tag/${{ env.VERSION }}"
