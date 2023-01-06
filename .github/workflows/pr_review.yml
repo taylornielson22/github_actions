@@ -18,9 +18,9 @@ jobs:
           echo "*Changes*" > notes.txt
           echo $NOTE | sed '/^[*] /!d' | sed 's/* //g' >> notes.txt
           echo "OUTPUT:"
-          cat notes.txt
+          NOTES= $(cat notes.txt)
           echo "NOTES=<<EOF" >> $GITHUB_ENV
-          echo "NOTES=$(cat notes.txt)" >> $GITHUB_ENV
+          echo "$NOTES=$(cat notes.txt)" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
       - uses: taylornielson22/slack_message@v1
         env:
