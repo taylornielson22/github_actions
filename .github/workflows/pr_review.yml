@@ -28,7 +28,7 @@ jobs:
           echo 'EOF' >> $GITHUB_ENV
       - uses: taylornielson22/slack_message@v1
         env: 
-          TITLE: "*New '${{ env.PACKAGE_NAME }}' package v${{ env.VERSION }} released!*"
+          TITLE: "*New ''${{ env.PACKAGE_NAME }}'' package v${{ env.VERSION }} released!*"
           LINE_BREAK: "\n=======================================\n"
           RElEASE_URL: ${{ env.REPO_URL }}/releases/tag/${{ env.VERSION }}
         with:
