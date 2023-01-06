@@ -6,4 +6,4 @@ Delete and redeploy CFL containers:
 Use below command on your venv:
 ```python -m pip install nimble-cfl -U --index-url=https://artifactory.eng.nimblestorage.com/artifactory/api/pypi/pypi/simple```
 CFL on NFS path is already updated with latest code:
-```/auto/share/repo/cfl.latest/lib```r
+```/auto/share/repo/cfl.latest/lib```
