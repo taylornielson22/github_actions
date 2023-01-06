@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: python:3.8-slim
-      env:
+    env:
         REPO_URL: ${{ github.server_url }}/${{ github.repository }}
         VERSION: v1.2.1
     steps:
