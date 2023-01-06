@@ -31,4 +31,4 @@ jobs:
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
-          message: ${{ env.TITLE }}\n${{ env.RElEASE_URL }}"\n${{ env.RELEASE_NOTES }}
+          message: "${{ env.TITLE }}\n${{ env.RElEASE_URL }}\n${{ env.RELEASE_NOTES }}"
