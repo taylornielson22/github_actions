@@ -16,7 +16,7 @@ jobs:
           NOTE=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/v1.2.1" | jq '.body')
           echo $NOTE
           echo "*Changes*" > notes.txt
-          echo $NOTE | sed '/^[*] /!d' >> notes.txt
+          echo $NOTE | sed '/^[*] /!d' | sed 's/* //g' >> notes.txt
           echo "OUTPUT:"
           cat notes.txt
           echo "NOTES=$(cat notes.txt)" >> $GITHUB_ENV
