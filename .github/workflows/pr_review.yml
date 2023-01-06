@@ -10,7 +10,7 @@ jobs:
       image: python:3.8-slim
       env:
         REPO_URL: ${{ github.server_url }}/${{ github.repository }}
-        VERSION: 1.2.1
+        VERSION: v1.2.1
     steps:
       - run: apt-get update
       - run: apt-get install -y jq git curl
@@ -28,5 +28,5 @@ jobs:
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
-          message: "*Changes*\n${{ env.RELEASE_NOTES }} ${{ secrets.INSTRUCT }}"
-          message_title: "*New CFL package v1.2.1 released!*\n${{ env.REPO_URL }}/releases/tag/${{ env.VERSION }}"
+          message: "*Changes*\n${{ env.RELEASE_NOTES }}"
+          message_title: "*New CFL package ${{ env.VERSION }} released!*\n${{ env.REPO_URL }}/releases/tag/${{ env.VERSION }}"
