@@ -28,5 +28,5 @@ jobs:
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
-          message: "${{ env.NOTES }} ${{ secrets.INSTRUCT }}"
+          message: "${{ env.NOTES }}"
           message_title: "*New CFL package v1.2.1 released!*"
