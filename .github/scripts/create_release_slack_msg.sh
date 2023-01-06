@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -x
 
 # Set file where slack message contents will be pasted into
 SLACK_MSG_CONTENTS=slack_msg.txt
