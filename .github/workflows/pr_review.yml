@@ -15,6 +15,8 @@ jobs:
       - run: apt-get update
       - run: apt-get install -y jq git curl
       - uses: actions/checkout@v3
+      - name: Get Package Name
+        run: echo "PACKAGE_NAME=$(python setup.py --name)" >> $GITHUB_OUTPUT
       - name: Create message from release notes
         run: |
           API_URL="${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${VERSION}"
@@ -26,9 +28,10 @@ jobs:
           echo 'EOF' >> $GITHUB_ENV
       - uses: taylornielson22/slack_message@v1
         env: 
+          TITLE: "*New '${{ env.PACKAGE_NAME }}' package v${{ env.VERSION }} released!*"
+          LINE_BREAK: "\n=======================================\n"
           RElEASE_URL: ${{ env.REPO_URL }}/releases/tag/${{ env.VERSION }}
-          TITLE: "*New CFL package ${{ env.VERSION }} released!*"
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
-          message: "${{ env.TITLE }}\n\n${{ env.RElEASE_URL }}\n${{ env.RELEASE_NOTES }}"
+          message: "${{ env.TITLE }}${{env.LINE_BREAK}}${{ env.RElEASE_URL }}\n\n${{ env.RELEASE_NOTES }}"
