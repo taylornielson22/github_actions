@@ -19,7 +19,7 @@ jobs:
         run: |
           API_URL="${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${VERSION}"
           NOTES=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${API_URL}" | jq '.body')
-          echo $NOTES | sed '/^[*] /!d' | sed 's/* //g' | sed 's+${REPO_URL}/pull/+#+g' > notes.txt 
+          echo $NOTES | sed '/^[*] /!d' | sed 's/* //g' | sed "s+$REPO_URL /pull/+#+g" > notes.txt 
           cat .github/workflows/release_msg_note.txt >> notes.txt
           echo 'RELEASE_NOTES<<EOF' >> $GITHUB_ENV
           cat notes.txt >> $GITHUB_ENV
