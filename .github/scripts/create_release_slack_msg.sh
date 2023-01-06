@@ -17,9 +17,9 @@ RELEASE_API_URL="${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${VE
 NOTES=$(curl -s -H "Authorization: Bearer ${GITHUB_TOKEN}" "${RELEASE_API_URL}" | jq '.body')
 
 # Remove everything besides list of changes 
-NOTES=$(echo "$NOTES" | sed '/^[*] /!d' | sed 's/* //g')
+NOTES=$(echo -e "$NOTES" | sed '/^[*] /!d' | sed 's/* //g')
 # Replace PR URLs with PR #
-NOTES=$(echo "$NOTES" | sed "s+${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/pull/+#+g")
+NOTES=$(echo -e "$NOTES" | sed "s+${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/pull/+#+g")
 
 # Append $NOTES & .github/release_msg_note.txt into $SLACK_MSG_CONTENTS file
 echo "$NOTES"  >> $SLACK_MSG_CONTENTS
