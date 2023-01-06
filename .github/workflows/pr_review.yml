@@ -15,23 +15,10 @@ jobs:
       - run: apt-get update
       - run: apt-get install -y jq git curl
       - uses: actions/checkout@v3
-      - name: Get Package Name
-        run: echo "PACKAGE_NAME=nimble-cfl" >> $GITHUB_ENV
-      - name: Create message from release notes
-        run: |
-          API_URL="${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${VERSION}"
-          NOTES=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${API_URL}" | jq '.body')
-          echo $NOTES | sed '/^[*] /!d' | sed 's/* //g' | sed "s+${REPO_URL}/pull/+#+g" > notes.txt 
-          cat .github/release_msg_note.txt >> notes.txt
-          echo 'RELEASE_NOTES<<EOF' >> $GITHUB_ENV
-          echo "*Changes*\n$(cat notes.txt)" >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
+      - name: Create/Format Slack Message w/ Release Notes
+        run: bash .github/scripts/create_release_slack_msg.sh
       - uses: taylornielson22/slack_message@v1
-        env: 
-          TITLE: "*New ''${{ env.PACKAGE_NAME }}'' package v${{ env.VERSION }} released!*"
-          LINE_BREAK: "\n=======================================\n"
-          RElEASE_URL: ${{ env.REPO_URL }}/releases/tag/${{ env.VERSION }}
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
-          message: "${{ env.TITLE }}${{env.LINE_BREAK}}${{ env.RElEASE_URL }}\n\n${{ env.RELEASE_NOTES }}"
+          message: "${{ env.SLACK_MESSAGE }}"
