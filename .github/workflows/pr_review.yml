@@ -14,6 +14,7 @@ jobs:
     steps:
       - run: apt-get update
       - run: apt-get install -y jq git curl
+      - uses: actions/checkout@v3
       - name: Create message from release notes
         run: |
           API_URL="${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/${VERSION}"
