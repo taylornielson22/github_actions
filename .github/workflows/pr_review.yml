@@ -9,7 +9,7 @@ jobs:
     container:
       image: python:3.8-slim
     env:
-        REPO_URL: ${{ github.server_url }}/${{ github.repository }}
+        PACKAGE_NAME: nimble-cfl
         VERSION: v1.2.1
     steps:
       - run: apt-get update
