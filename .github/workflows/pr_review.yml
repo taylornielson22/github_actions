@@ -16,11 +16,14 @@ jobs:
           NOTES=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/v1.2.1" | jq '.body')
           echo $NOTES
           echo "NOTES='*Changes*\n'$(echo $NOTES | sed '/^[*] /!d')" >> GITHUB_ENV
+          echo $NOTES
         #  NOTES="*Changes*\n"$(echo $body | sed '/^[*] /!d')
         #  echo "NOTES=$NOTES${{ secrets.INSTRUCT }}" >> GITHUB_ENV
       - uses: taylornielson22/slack_message@v1
+        env:
+          NOTE: ${{ env.NOTES }}
         with:
           channel: team-dice-cfl-code-review-requests
           slack_webhook: ${{ secrets.WEBHOOK }}
-          message: "${{ env.NOTES }} ${{ secrets.INSTRUCT }}"
+          message: "${{ env.NOTE }} ${{ secrets.INSTRUCT }}"
           message_title: "*New CFL package v1.2.1 released!*"
