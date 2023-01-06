@@ -14,7 +14,7 @@ jobs:
       - name: Create message from release notes
         run: |
           release_notes=$(curl -s -H "Authorization: Bearer ${{ github.token }}" "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/releases/tags/v1.2.1" | jq '.body')
-          echo $release_notes | sed '/^[*] /!d' | sed 's/* //g' | sed's+${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/pull/+#+g' > summary.txt
+          echo $release_notes | sed '/^[*] /!d' | sed 's/* //g' | sed's+${{ github.server.url }}/${GITHUB_REPOSITORY}/pull/+#+g' > summary.txt
           echo 'RELEASE_SUMMARY<<EOF' >> $GITHUB_ENV
           cat summary.txt >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
