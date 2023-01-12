@@ -85,7 +85,7 @@ jobs:
       image: python:3.8-slim
       env: 
         # Used check if the package in docker container matches the 'version' output var from package_info job
-        RELEASE_VERSION: 6.0.0
+        RELEASE_VERSION: 6.0.1
         # Package to verify version. PACKAGE_NAME is set to 'name' output var from the package_info job
         PACKAGE_NAME: flake8
     steps:
