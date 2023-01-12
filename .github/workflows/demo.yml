@@ -80,7 +80,7 @@ jobs:
  #         black: false
  #         flake8: true
   package_info:
-    runs-on: [self-hosted, k8s]
+    runs-on: ubuntu-latest
     outputs:
       # jobs outputs include version of package in tagged commit (main)
       version: ${{ steps.release_version.outputs.version }}
