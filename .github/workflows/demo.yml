@@ -88,7 +88,7 @@ jobs:
       name:  ${{ steps.package.outputs.name }}
     steps:
       # Get Version that master currently is set to
-      - run: echo "version=6.0.0" >> $GITHUB_OUTPUT
+      - run: echo "version=6.0.1" >> $GITHUB_OUTPUT
         id: release_version
       # Get python package name of library
       - run: echo "name=flake8" >> $GITHUB_OUTPUT
