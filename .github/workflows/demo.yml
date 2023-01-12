@@ -95,20 +95,22 @@ jobs:
         id: package
   verify_version:
     needs: [ package_info ]
-    name: Verify ${{ needs.package_info.outputs.name }} v${{ needs.package_info.outputs.version }} is installed on Docker Image
     runs-on: ubuntu-latest
-    container:
-      image: python:3.8-slim
     env: 
       # Variables set to the outputs from package_info job
       RELEASE_VERSION: ${{ needs.package_info.outputs.version }}
       PACKAGE_NAME: ${{ needs.package_info.outputs.name }}
+    name: Verify ${{ env.PACKAGE_NAME }} v${{ env.RELEASE_VERSION }} is installed on Docker Image
+    container:
+      image: python:3.8-slim
     steps:
       - run: |
           python -m pip install --upgrade pip
           python -m pip install flake8
       - name: Get Package Version Installed on Container
-        run: echo "VERSION=$(pip freeze | sed -n "s/^${PACKAGE_NAME}==//p")" >> $GITHUB_ENV && echo $VERSION
+        run: |
+          echo "VERSION=$(pip freeze | sed -n "s/^${PACKAGE_NAME}==//p")" >> $GITHUB_ENV 
+          echo "$PACKAGE_NAME v$VERSION is installed"
       - name: Verify Version Matches New Released Version
         # If incorrect version is installed, job will fail with exit code of 1
         if: ${{ env.VERSION != env.RELEASE_VERSION }}
