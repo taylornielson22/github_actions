@@ -108,7 +108,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install flake8
       - name: Get Package Version Installed on Image
-        run: echo "VERSION="$(pip freeze | sed -n "s/^${PACKAGE_NAME}==//p")"" >> $GITHUB_ENV
+        run: echo "VERSION=$(pip freeze | sed -n "s/^${PACKAGE_NAME}==//p")" >> $GITHUB_ENV
       - name: Verify Version Matches New Released Version
         run: |
           if [[ "$RELEASE_VERSION" != "$VERSION" ]]; then
