@@ -95,7 +95,7 @@ jobs:
       - name: Get Package Version Installed on Image
         run: echo "VERSION="$(pip freeze | sed -n "s/^${PACKAGE_NAME}==//p")"" >> $GITHUB_ENV
       - name: Verify Version Matches New Released Version
-        if: ${{ github.env.VERSION != github.env.RELEASE_VERSION }}
+        if: ${{ env.VERSION != env.RELEASE_VERSION }}
         run: echo "$PACKAGE_NAME $VERSION is installed & does not match the latest version $RELEASE_VERSION" && exit 1
       - run: echo "Latest version $VERSION of $PACKAGE_NAME is installed!!"
       
