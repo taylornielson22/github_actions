@@ -79,15 +79,29 @@ jobs:
  #         head_sha: ${{ github.sha }}
  #         black: false
  #         flake8: true
+  package_info:
+    runs-on: [self-hosted, k8s]
+    outputs:
+      # jobs outputs include version of package in tagged commit (main)
+      version: ${{ steps.release_version.outputs.version }}
+      # jobs outputs include name of the library package 
+      name:  ${{ steps.package.outputs.name }}
+    steps:
+      # Get Version that master currently is set to
+      - run: echo "version=6.0.0" >> $GITHUB_OUTPUT
+        id: release_version
+      # Get python package name of library
+      - run: echo "name=flake8" >> $GITHUB_OUTPUT
+        id: package
   verify_version:
     runs-on: ubuntu-latest
     container:
       image: python:3.8-slim
       env: 
         # Used check if the package in docker container matches the 'version' output var from package_info job
-        RELEASE_VERSION: 6.0.0
+        RELEASE_VERSION: ${{ needs.package_info.outputs.version }}
         # Package to verify version. PACKAGE_NAME is set to 'name' output var from the package_info job
-        PACKAGE_NAME: flake8
+        PACKAGE_NAME: ${{ needs.package_info.outputs.name }}
     steps:
       - run: |
           python -m pip install --upgrade pip
