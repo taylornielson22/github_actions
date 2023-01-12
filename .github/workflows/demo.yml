@@ -103,6 +103,9 @@ jobs:
       RELEASE_VERSION: ${{ needs.package_info.outputs.version }}
       PACKAGE_NAME: ${{ needs.package_info.outputs.name }}
     steps:
+      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install flake8
       - name: Get Package Version Installed on Container
         run: echo "VERSION=$(pip freeze | sed -n "s/^${PACKAGE_NAME}==//p")" >> $GITHUB_ENV
       - name: Verify Version Matches New Released Version
