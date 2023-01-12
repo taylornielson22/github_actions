@@ -95,6 +95,7 @@ jobs:
         id: package
   verify_version:
     needs: [ package_info ]
+    name: Verify ${{ needs.package_info.outputs.name }} v${{ needs.package_info.outputs.version }} is installed on Docker Image
     runs-on: ubuntu-latest
     container:
       image: python:3.8-slim
