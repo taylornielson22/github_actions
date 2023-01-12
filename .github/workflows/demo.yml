@@ -94,6 +94,7 @@ jobs:
       - run: echo "name=flake8" >> $GITHUB_OUTPUT
         id: package
   verify_version:
+    needs: [ package_info ]
     runs-on: ubuntu-latest
     container:
       image: python:3.8-slim
