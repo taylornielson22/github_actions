@@ -108,13 +108,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install flake8
       - name: Get Package Version Installed on Container
-        run: |
-          echo "VERSION=$(pip freeze | sed -n "s/^${PACKAGE_NAME}==//p")" >> $GITHUB_ENV 
-          echo "$PACKAGE_NAME v$VERSION is installed"
+        run: echo "VERSION=$(pip freeze | sed -n "s/^${PACKAGE_NAME}==//p")" >> $GITHUB_ENV
       - name: Verify Version Matches New Released Version
         # If incorrect version is installed, job will fail with exit code of 1
         if: ${{ env.VERSION != env.RELEASE_VERSION }}
         run: echo "$PACKAGE_NAME $VERSION is installed & does not match the latest version $RELEASE_VERSION" && exit 1
+      - run: echo "$PACKAGE_NAME $VERSION is installed and matches the latest version $PACKAGE_NAME $RELEASE_VERSION!"
       
   #create_release:
    # runs-on: ubuntu-latest
